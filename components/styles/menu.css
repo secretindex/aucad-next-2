@@ -1,0 +1,5 @@
+.disable-underscore > .ant-menu-horizontal,
+.disable-underscore > .ant-menu-item::after,
+.disable-underscore > .ant-menu-submenu::after {
+  border: none !important;
+}
