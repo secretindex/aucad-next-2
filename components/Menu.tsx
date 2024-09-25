@@ -119,7 +119,7 @@ export default function HeaderMenu() {
       key: "Logout",
       label: (
         <Link href={"/"} onClick={() => signOut()} className="text-inherit">
-          <LoginOutlined />,
+          <LoginOutlined />
         </Link>
       )
     },
