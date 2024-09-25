@@ -1,13 +1,18 @@
 "use client"
 
+import { supabaseClient } from "@/lib/supabaseClient"
 import { GoogleOutlined } from "@ant-design/icons"
 import { signIn } from "next-auth/react"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
 import { BaseSyntheticEvent, useState } from "react"
 
 const Login = () => {
   const [email, setEmail] = useState<string>("")
   const [password, setPassword] = useState<string>("")
+  // const [errorMessage, setErrorMessage] = useState<string>("")
+
+  const router = useRouter()
 
   const handleChange = (field: string, val: string) => {
     if (field === "email") {
@@ -17,14 +22,18 @@ const Login = () => {
     }
   }
 
-  const handleSubmit = (e: BaseSyntheticEvent) => {
+  const handleSubmit = async (e: BaseSyntheticEvent) => {
     e.preventDefault()
     console.log(email, password)
+
+    const res = await fetch("/api/users")
+    const data = await res.json()
+    console.log(data);
   }
 
   const handleLogin = () => {
     signIn("google")
-    location
+    router.push("/")
   }
 
   return (

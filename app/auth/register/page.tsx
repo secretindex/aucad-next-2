@@ -1,12 +1,14 @@
 "use client"
 
-import { useState, BaseSyntheticEvent } from "react"
+import { useState, BaseSyntheticEvent, useEffect } from "react"
 import Link from "next/link"
+import { supabaseClient } from "@/lib/supabaseClient"
 
 const Register = () => {
   const [email, setEmail] = useState<string>("")
   const [password, setPassword] = useState<string>("")
   const [confirmPassword, setConfirmPassword] = useState<string>("")
+  const [error, setError] = useState<string>("")
 
   const handleChange = (field: string, val: string) => {
     if (field === "email") {
@@ -18,8 +20,28 @@ const Register = () => {
     }
   }
 
-  const handleSubmit = () => {
-    console.log(email, password);
+  useEffect(() => {
+    if (password !== confirmPassword) {
+      setError("⚠️ Passwords doesn't match")
+    } else {
+      setError("")
+    }
+  }, [password, confirmPassword])
+
+  const handleSubmit = async (e: any) => {
+    e.preventDefault()
+
+    if (error) return
+
+    const data = await fetch("/api/users", {
+      method: "POST",
+      body: JSON.stringify({ email, password }),
+    })
+    const response = await data.json()
+
+    console.log(`this is ${email} and ${password} and this is response 👇`)
+
+    console.log(response)
   }
 
   return (
@@ -41,29 +63,50 @@ const Register = () => {
           <div className="w-full">
             <input
               type="password"
-              className="border-[1px] outline-none w-full rounded-md bg-gray-50 px-4 py-2"
+              className={`border-[1px] transition-all duration-150 ease-in-out ${
+                error ? "border-[#de185a]" : ""
+              } outline-none w-full rounded-md bg-gray-50 px-4 py-2`}
               placeholder="Senha"
               value={password}
+              required
               onChange={(e: BaseSyntheticEvent) =>
                 handleChange("pass", e.target.value)
               }
             />
           </div>
           <div>
-            <input 
+            <input
               type="password"
-              value={confirmPassword} 
-              className="border-[1px] outline-none w-full rounded-md bg-gray-50 px-4 py-2"
+              value={confirmPassword}
+              className={`border-[1px] transition-all duration-150 ease-in-out ${
+                error ? "border-[#de185a]" : ""
+              } outline-none w-full rounded-md bg-gray-50 px-4 py-2`}
               placeholder="Confirmar senha"
-              onChange={(e: BaseSyntheticEvent) => handleChange("confirmPass", e.target.value)}
+              required
+              onChange={(e: BaseSyntheticEvent) =>
+                handleChange("confirmPass", e.target.value)
+              }
             />
+            {error ? (
+              <label className="text-[#de185a] text-sm">{error}</label>
+            ) : (
+              ""
+            )}
           </div>
           <div className="mb-2">
-            <button className="w-full py-2 text-gray-50 rounded-md bg-[#26a69a] transition-all ease-in-out hover:bg-[#10d19a]" onClick={handleSubmit}>Login</button>
+            <button
+              className="w-full py-2 text-gray-50 rounded-md bg-[#26a69a] transition-all ease-in-out hover:bg-[#10d19a]"
+              onClick={handleSubmit}
+            >
+              Criar conta
+            </button>
           </div>
-          <hr/>
+          <hr />
           <div className="text-center text-sm">
-            <span className="text-gray-600">Já tem uma conta?</span> <Link className="text-[#26a69a]" href="/auth/login">Entre aqui</Link>
+            <span className="text-gray-600">Já tem uma conta?</span>{" "}
+            <Link className="text-[#26a69a]" href="/auth/login">
+              Entre aqui
+            </Link>
           </div>
         </form>
       </div>
