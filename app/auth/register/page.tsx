@@ -24,7 +24,7 @@ const Register = () => {
 
   return (
     <section className="h-full w-full flex flex-col items-center justify-center">
-      <div className="border-[2px] py-2 px-4 w-2/6 border-[#cecece40] rounded-lg">
+      <div className="border-[2px] py-2 px-4 shadow-md w-2/6 border-[#cecece40] rounded-lg">
         <h1 className="text-lg font-bold text-center my-2">Crie sua conta</h1>
         <form className="flex flex-col gap-2 w-full px-4">
           <div className="w-full">
@@ -59,7 +59,7 @@ const Register = () => {
             />
           </div>
           <div className="mb-2">
-            <button className="w-full py-2 rounded-md bg-[#26a69a] transition-all ease-in-out hover:bg-[#10d19a]" onClick={handleSubmit}>Login</button>
+            <button className="w-full py-2 text-gray-50 rounded-md bg-[#26a69a] transition-all ease-in-out hover:bg-[#10d19a]" onClick={handleSubmit}>Login</button>
           </div>
           <hr/>
           <div className="text-center text-sm">

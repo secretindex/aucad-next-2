@@ -19,15 +19,26 @@ const Login = () => {
 
   const handleSubmit = (e: BaseSyntheticEvent) => {
     e.preventDefault()
-    console.log(email, password);
+    console.log(email, password)
+  }
+
+  const handleLogin = () => {
+    signIn("google")
+    location
   }
 
   return (
-    <section className="h-full w-full flex flex-col items-center justify-center">
-      <div className="border-[2px] flex flex-col gap-2 py-2 px-4 w-2/6 border-[#cecece40] rounded-lg">
+    <section className="h-full w-full flex flex-col shadow-md items-center justify-center">
+      <div className="border-[2px] flex shadow-md flex-col gap-2 py-2 px-4 w-2/6 border-[#cecece40] rounded-lg">
         <h1 className="text-lg font-bold text-center my-2">Login</h1>
         <div className="flex flex-col gap-2 px-4 items-center justify-center w-full">
-          <button className="w-full py-2 flex items-center justify-center gap-2 transition-all ease-in-out hover:bg-gray-50 px-4 roudned-md border-[1px] border-[#cecece40] mx-4" onClick={() => signIn("google")}><span className="text-gray-500">You can sign in using google</span> <GoogleOutlined /></button>
+          <button
+            className="w-full py-2 flex items-center justify-center gap-2 transition-all ease-in-out hover:bg-gray-50 px-4 roudned-md border-[1px] border-[#cecece40] mx-4"
+            onClick={handleLogin}
+          >
+            <span className="text-gray-500">You can sign in using google</span>{" "}
+            <GoogleOutlined />
+          </button>
         </div>
         <hr />
         <form className="flex flex-col gap-2 w-full px-4">
@@ -54,11 +65,19 @@ const Login = () => {
             />
           </div>
           <div>
-            <button className="w-full py-2 rounded-md bg-[#26a69a] transition-all ease-in-out hover:bg-[#10d19a]" onClick={handleSubmit}>Login</button>
+            <button
+              className="w-full py-2 rounded-md text-gray-50 bg-[#26a69a] transition-all ease-in-out hover:bg-[#10d19a]"
+              onClick={handleSubmit}
+            >
+              Login
+            </button>
           </div>
           <hr />
-          <div className="text-center">
-            <span>Não tem uma conta?</span> <Link className="text-[#26a69a]" href="/auth/register">Crie aqui</Link>
+          <div className="text-center text-sm">
+            <span className="text-gray-600">Não tem uma conta?</span>{" "}
+            <Link className="text-[#26a69a]" href="/auth/register">
+              Crie aqui
+            </Link>
           </div>
         </form>
       </div>
