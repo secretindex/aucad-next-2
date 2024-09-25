@@ -1,11 +1,17 @@
-import { FC } from "react";
+import { FC } from "react"
+import RegisterPage from "@/components/RegisterPage"
+import inactiveDocuments from "@/utils/objects/InactiveObj"
 
 const Inativos: FC = () => {
   return (
-    <section>
-      <></>
-    </section>
-  );
-};
+    <>
+      <RegisterPage
+        title="Ativos"
+        category="active"
+        documents={inactiveDocuments}
+      />
+    </>
+  )
+}
 
-export default Inativos;
+export default Inativos
