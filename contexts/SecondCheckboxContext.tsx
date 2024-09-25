@@ -6,7 +6,7 @@ import {
   SetStateAction,
 } from "react"
 
-import FinalTextDocuments from "../utils/endTextObject"
+import FinalTextDocuments from "@/utils/endTextObject"
 
 export const documentsContext: FinalTextDocuments = {
   foto: false,

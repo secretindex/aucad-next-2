@@ -5,7 +5,7 @@ import { Cascader } from "antd"
 
 import { SecondCheckboxContext } from "@/contexts/SecondCheckboxContext"
 import { PensionerContext } from "@/contexts/PensionerContext"
-import { InactivesContext } from "@/contexts/InactivesContext"
+import { InactivesContext } from "@/contexts/Inactivescontext"
 
 type OptionVal = string | number | undefined
 

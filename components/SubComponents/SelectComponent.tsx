@@ -3,7 +3,7 @@ import { Select } from "antd"
 import NestedSelect, { OptionInt } from "./NestedSelect"
 import { DocumentosOptionsProps } from "./types/essentialTypes"
 
-import { InactivesContext, InactivesContextType } from "@/contexts/InactivesContext"
+import { InactivesContext, InactivesContextType } from "@/contexts/Inactivescontext"
 import { SecondCheckboxContentType, SecondCheckboxContext } from "@/contexts/SecondCheckboxContext"
 import { PensionerContentType, PensionerContext } from "@/contexts/PensionerContext"
 

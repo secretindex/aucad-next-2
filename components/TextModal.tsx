@@ -19,7 +19,8 @@ import EndText from "../utils/endTextGen"
 
 import { TextAreaRef } from "antd/es/input/TextArea"
 import { PasteTextContext } from "@/contexts/PasteTextContext"
-import { InactivesContext } from "@/contexts/InactivesContext"
+import { InactivesContext } from "@/contexts/Inactivescontext"
+import ActivesDocuments from "@/utils/endTextObject"
 
 interface MouseCoords {
   x: number
@@ -92,7 +93,7 @@ const TextModal: React.FC<TextModalProps> = ({ category }) => {
     setShowReject(false)
   }
 
-  const text = textField!.text
+  const text = textField?.text
 
   useEffect(() => {
     document.addEventListener("click", handleClick)
@@ -104,7 +105,7 @@ const TextModal: React.FC<TextModalProps> = ({ category }) => {
 
   const generateText = () => {
     if (category === "active") {
-      const finalText = new EndText(globalDocs!.docs)
+      const finalText = new EndText(globalDocs!.docs as ActivesDocuments)
       const rejectText = finalText.returnActivesRejectText()
 
       textField?.setText(rejectText.trim())
@@ -138,7 +139,7 @@ const TextModal: React.FC<TextModalProps> = ({ category }) => {
 
   const handleCopy = () => {
     navigator.clipboard
-      .writeText(text)
+      .writeText(text as string)
       .then(() => {
         message.success("Text copied to clipboard!")
       })
