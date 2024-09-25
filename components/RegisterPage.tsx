@@ -1,3 +1,5 @@
+"use client"
+
 import { ReloadOutlined } from "@ant-design/icons"
 
 import DocumentOptions from "./SubComponents/DocumentOptions"
@@ -11,14 +13,15 @@ import {
   documentsContext,
   SecondCheckboxContext,
 } from "@/contexts/SecondCheckboxContext"
-import { InactivesContext, inactivesDefault } from "@/contexts/InactivesContext"
+import { InactivesContext, inactivesDefault } from "@/contexts/Inactivescontext"
 import {
   PensionerContext,
   pensionerContextDocs,
 } from "@/contexts/PensionerContext"
 import { TextFieldContext } from "@/contexts/TextfieldContext"
 
-import { useRouter } from "next/router"
+import { useRouter } from "next/navigation"
+import { usePathname } from "next/navigation"
 
 import { Category } from "./SubComponents/types/essentialTypes"
 
@@ -39,7 +42,7 @@ const RegisterPage: React.FC<RegisterPageProps> = ({
   const pensionerDocs = useContext(PensionerContext)
   const inactiveDocs = useContext(InactivesContext)
 
-  const { pathname } = useRouter()
+  const pathname = usePathname()
 
   const textField = useContext(TextFieldContext)
   const [optionsWidth, setOptionsWidth] = useState<boolean>(false)
