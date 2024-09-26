@@ -2,6 +2,7 @@
 
 import { useState, BaseSyntheticEvent, useEffect } from "react"
 import Link from "next/link"
+import axios from "axios"
 
 const Register = () => {
   const [email, setEmail] = useState<string>("")
@@ -34,16 +35,17 @@ const Register = () => {
 
     const login = { email, password }
 
-    const data = await fetch("/api/users", {
-      method: "POST",
-      body: JSON.stringify(login),
-    })
+    const response = await axios.post("/api/users", login)
 
-    console.log("api restful")
+    console.log(response.data)
 
-    data.json().then((data) => {
-      console.log(data)
-    })
+    if (response.data.error) {
+      console.warn(
+        `${response.data.error.code} and ${response.data.error.name}`
+      )
+    } else {
+      console.log(`${response.data.message} and ${response.data.data.user}`)
+    }
   }
 
   return (

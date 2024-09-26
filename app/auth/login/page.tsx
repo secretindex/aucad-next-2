@@ -1,6 +1,7 @@
 "use client"
 
 import { GoogleOutlined } from "@ant-design/icons"
+import axios from "axios"
 import { signIn } from "next-auth/react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
@@ -25,9 +26,9 @@ const Login = () => {
     e.preventDefault()
     console.log(email, password)
 
-    const res = await fetch("/api/users")
-    const data = await res.json()
-    console.log(data);
+    const res = await axios.get("/api/users")
+
+    console.log(res.data);
   }
 
   const handleLogin = () => {
