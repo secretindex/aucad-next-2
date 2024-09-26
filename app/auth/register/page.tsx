@@ -3,6 +3,8 @@
 import { useState, BaseSyntheticEvent, useEffect } from "react"
 import Link from "next/link"
 import axios from "axios"
+import Image from "next/image"
+import AucadIcon from "../../../public/assets/aucad ico.jpg"
 
 const Register = () => {
   const [email, setEmail] = useState<string>("")
@@ -50,8 +52,17 @@ const Register = () => {
 
   return (
     <section className="h-full w-full flex flex-col items-center justify-center">
-      <div className="border-[2px] py-2 px-4 shadow-md w-2/6 border-[#cecece40] rounded-lg">
-        <h1 className="text-lg font-bold text-center my-2">Crie sua conta</h1>
+      <div className="border-[2px] flex flex-col gap-4 py-8 px-4 shadow-md w-2/6 border-[#cecece40] rounded-lg">
+        <div className="m-auto text-center">
+          <Image
+            src={AucadIcon}
+            alt="aucad icon"
+            className="block m-auto rounded-full border-[1px] border-[#000] shadow-md"
+            width={50}
+            height={50}
+          />
+          <h1 className="text-lg font-bold text-center my-2">Crie sua conta</h1>
+        </div>
         <form className="flex flex-col gap-2 w-full px-4">
           <div className="w-full">
             <input

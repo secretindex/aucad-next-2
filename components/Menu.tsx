@@ -149,7 +149,7 @@ export default function HeaderMenu() {
           items={menuItemsSecond}
         />
         {
-          status === "unauthenticated" ? (
+          status === "unauthenticated" || status === "loading" ? (
             <Menu
               mode="horizontal"
               selectedKeys={[]}

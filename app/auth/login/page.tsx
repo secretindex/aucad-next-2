@@ -7,6 +7,9 @@ import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { BaseSyntheticEvent, useState } from "react"
 
+import AucadIcon from "../../../public/assets/aucad ico.jpg"
+import Image from "next/image"
+
 const Login = () => {
   const [email, setEmail] = useState<string>("")
   const [password, setPassword] = useState<string>("")
@@ -28,7 +31,7 @@ const Login = () => {
 
     const res = await axios.get("/api/users")
 
-    console.log(res.data);
+    console.log(res.data)
   }
 
   const handleLogin = () => {
@@ -38,8 +41,17 @@ const Login = () => {
 
   return (
     <section className="h-full w-full flex flex-col shadow-md items-center justify-center">
-      <div className="border-[2px] flex shadow-md flex-col gap-2 py-2 px-4 w-2/6 border-[#cecece40] rounded-lg">
-        <h1 className="text-lg font-bold text-center my-2">Login</h1>
+      <div className="border-[2px] flex shadow-md flex-col gap-4 py-8 px-4 w-2/6 border-[#cecece40] rounded-lg">
+        <div className="m-auto text-center">
+          <Image
+            src={AucadIcon}
+            alt="aucad icon"
+            className="block m-auto rounded-full border-[1px] border-[#000] shadow-md"
+            width={50}
+            height={50}
+          />
+          <h1 className="text-lg font-bold text-center my-2">Entre no Aucad</h1>
+        </div>
         <div className="flex flex-col gap-2 px-4 items-center justify-center w-full">
           <button
             className="w-full py-2 flex items-center justify-center gap-2 transition-all ease-in-out hover:bg-gray-50 px-4 roudned-md border-[1px] border-[#cecece40] mx-4"
@@ -55,7 +67,7 @@ const Login = () => {
             <input
               type="email"
               className="border-[1px] outline-none w-full rounded-md bg-gray-50 px-4 py-2"
-              placeholder="Type your email"
+              placeholder="Digite seu e-mail"
               value={email}
               onChange={(e: BaseSyntheticEvent) =>
                 handleChange("email", e.target.value)
@@ -66,7 +78,7 @@ const Login = () => {
             <input
               type="password"
               className="border-[1px] outline-none w-full rounded-md bg-gray-50 px-4 py-2"
-              placeholder="Type your password"
+              placeholder="Digite sua senha"
               value={password}
               onChange={(e: BaseSyntheticEvent) =>
                 handleChange("pass", e.target.value)
