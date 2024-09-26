@@ -1,6 +1,6 @@
 import { supabaseClient } from "@/lib/supabaseClient"
 
-async function GET(res: Response) {
+async function GET() {
   const { data, error } = await supabaseClient.from("users").select("*")
 
   if (error) {
@@ -10,22 +10,21 @@ async function GET(res: Response) {
   return Response.json({ data: data, status: "ok" })
 }
 
-async function POST(req: Request, _res: Response) {
-  const {
-    name = "johny prev",
-    email,
-    password,
-    personalMessages = { name: "" },
-    admin = false,
-  } = await req.json()
+async function POST(req: Request) {
+  const { email, password } = await req.json();
 
-  const { error } = await supabaseClient
-    .from("users")
-    .insert({ name, email: email, password: password, personalMessages, admin })
+  console.log(email, password)
+
+  const { data, error } = await supabaseClient.auth.signUp({
+    email,
+    password
+  });
+
+  console.log(data)
 
   if (error) return Response.json({ error: error, status: "error" })
 
-  return Response.json({ message: "user created successfully", status: "ok" })
+  return Response.json({ message: "user created successfully", data: data, status: "ok" })
 }
 
 export { GET, POST }

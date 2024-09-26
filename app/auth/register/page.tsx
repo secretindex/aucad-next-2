@@ -2,7 +2,6 @@
 
 import { useState, BaseSyntheticEvent, useEffect } from "react"
 import Link from "next/link"
-import { supabaseClient } from "@/lib/supabaseClient"
 
 const Register = () => {
   const [email, setEmail] = useState<string>("")
@@ -33,15 +32,18 @@ const Register = () => {
 
     if (error) return
 
+    const login = { email, password }
+
     const data = await fetch("/api/users", {
       method: "POST",
-      body: JSON.stringify({ email, password }),
+      body: JSON.stringify(login),
     })
-    const response = await data.json()
 
-    console.log(`this is ${email} and ${password} and this is response 👇`)
+    console.log("api restful")
 
-    console.log(response)
+    data.json().then((data) => {
+      console.log(data)
+    })
   }
 
   return (
