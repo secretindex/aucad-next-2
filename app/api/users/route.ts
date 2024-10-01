@@ -1,4 +1,4 @@
-import { supabaseClient } from "@/lib/supabaseClient"
+import { supabaseClient } from "@/lib/supabase/client"
 
 async function GET() {
   const { data, error } = await supabaseClient.from("users").select("*")

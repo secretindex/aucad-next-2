@@ -6,6 +6,8 @@ import axios from "axios"
 import Image from "next/image"
 import AucadIcon from "../../../public/assets/aucad ico.jpg"
 
+import { signup } from "./actions"
+
 const Register = () => {
   const [email, setEmail] = useState<string>("")
   const [password, setPassword] = useState<string>("")
@@ -46,7 +48,12 @@ const Register = () => {
         `${response.data.error.code} and ${response.data.error.name}`
       )
     } else {
-      console.log(`${response.data.message} and ${response.data.data.user}`)
+      console.log(`${response.data.message} and ${response.data.data.user}\n\n`)
+
+      console.log(response.data.data.user.email)
+      console.log(response.data.data.user.id)
+      console.log(response.data.data.user.role)
+      console.log(response.data.data.user.created_at)
     }
   }
 
@@ -67,6 +74,8 @@ const Register = () => {
           <div className="w-full">
             <input
               type="email"
+              name="email"
+              id="email"
               className="border-[1px] outline-none w-full rounded-md bg-gray-50 px-4 py-2"
               placeholder="Email"
               value={email}
@@ -78,6 +87,8 @@ const Register = () => {
           <div className="w-full">
             <input
               type="password"
+              name="password"
+              id="password"
               className={`border-[1px] transition-all duration-150 ease-in-out ${
                 error ? "border-[#de185a]" : ""
               } outline-none w-full rounded-md bg-gray-50 px-4 py-2`}
@@ -92,6 +103,8 @@ const Register = () => {
           <div>
             <input
               type="password"
+              name="confirm-password"
+              id="confirm-password"
               value={confirmPassword}
               className={`border-[1px] transition-all duration-150 ease-in-out ${
                 error ? "border-[#de185a]" : ""
@@ -110,8 +123,8 @@ const Register = () => {
           </div>
           <div className="mb-2">
             <button
-              className="w-full py-2 text-gray-50 rounded-md bg-[#26a69a] transition-all ease-in-out hover:bg-[#10d19a]"
-              onClick={handleSubmit}
+              className="w-full py-2 text-gray-50 rounded-md bg-[#26a69a] transition-all ease-in-out hover:bg-[#2bbe94]"
+              formAction={signup}
             >
               Criar conta
             </button>

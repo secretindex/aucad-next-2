@@ -1,7 +1,5 @@
 "use client"
 
-import { signOut, useSession } from "next-auth/react"
-
 import { Layout, Menu, Typography, Image } from "antd"
 import {
   QuestionCircleOutlined,
@@ -99,11 +97,10 @@ const menuThird = [
 ]
 
 export default function HeaderMenu() {
-  const { data: session, status } = useSession();
-
-  console.log(useSession())
-
-  console.log(session);
+  const status = "unauthenticated";
+  const signOut = () => {
+    console.log("signed out")
+  }
 
   const menuLogged = [
     {
@@ -127,7 +124,7 @@ export default function HeaderMenu() {
       key: "Profile",
       label: (
         <div className="flex justify-center items-center gap-2">
-          <Image alt="profile image" preview={false} width={28} height={28} className="rounded-full" src={session?.user?.image as string} />
+          <Image alt="profile image" preview={false} width={28} height={28} className="rounded-full" src={"oi" as string} />
         </div>
       )
     }

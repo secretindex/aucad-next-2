@@ -6,6 +6,7 @@ import { signIn } from "next-auth/react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { BaseSyntheticEvent, useState } from "react"
+import { login } from "../register/actions"
 
 import AucadIcon from "../../../public/assets/aucad ico.jpg"
 import Image from "next/image"
@@ -88,7 +89,7 @@ const Login = () => {
           <div>
             <button
               className="w-full py-2 rounded-md text-gray-50 bg-[#26a69a] transition-all ease-in-out hover:bg-[#10d19a]"
-              onClick={handleSubmit}
+              formAction={login}
             >
               Login
             </button>
