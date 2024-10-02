@@ -1,9 +1,11 @@
-import { redirect } from 'next/navigation'
-import { revalidatePath } from 'next/cache'
+// import { redirect } from 'next/navigation'
+import { revalidatePath } from "next/cache"
+import { useRouter } from "next/router"
 
-import { createClient } from '@/lib/supabase/ssr/ssrServer'
+import { createClient } from "@/lib/supabase/ssr/ssrClient"
 
 export async function logout() {
+  const navigate = useRouter()
   const supabase = createClient()
 
   const { error } = await supabase.auth.signOut()
@@ -11,9 +13,9 @@ export async function logout() {
   console.error(error)
 
   if (error) {
-    redirect('/error')
+    navigate.push("/error")
   }
 
-  revalidatePath('/', 'layout')
-  redirect('/')
+  revalidatePath("/", "layout")
+  navigate.push("/")
 }
