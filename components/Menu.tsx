@@ -12,6 +12,8 @@ import Link from "next/link"
 
 import "@/components/styles/menu.css"
 
+import { createClient } from '@/lib/supabase/ssr/ssrClient'
+
 const { Title } = Typography
 
 const menuItemsSecond = [
@@ -96,11 +98,14 @@ const menuThird = [
   }
 ]
 
-export default function HeaderMenu() {
+export default async function HeaderMenu() {
+  const supabase = createClient()
   const status = "unauthenticated";
   const signOut = () => {
     console.log("signed out")
   }
+
+  const { data, error } = await supabase.auth.getUser()
 
   const menuLogged = [
     {
@@ -146,7 +151,7 @@ export default function HeaderMenu() {
           items={menuItemsSecond}
         />
         {
-          status === "unauthenticated" || status === "loading" ? (
+          error || !data?.user ? (
             <Menu
               mode="horizontal"
               selectedKeys={[]}

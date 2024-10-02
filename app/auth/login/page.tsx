@@ -67,6 +67,8 @@ const Login = () => {
           <div className="w-full">
             <input
               type="email"
+              name="email"
+              id="email"
               className="border-[1px] outline-none w-full rounded-md bg-gray-50 px-4 py-2"
               placeholder="Digite seu e-mail"
               value={email}
@@ -78,6 +80,8 @@ const Login = () => {
           <div className="w-full">
             <input
               type="password"
+              name="password"
+              id="password"
               className="border-[1px] outline-none w-full rounded-md bg-gray-50 px-4 py-2"
               placeholder="Digite sua senha"
               value={password}

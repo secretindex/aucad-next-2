@@ -50,10 +50,10 @@ const Register = () => {
     } else {
       console.log(`${response.data.message} and ${response.data.data.user}\n\n`)
 
-      console.log(response.data.data.user.email)
-      console.log(response.data.data.user.id)
-      console.log(response.data.data.user.role)
-      console.log(response.data.data.user.created_at)
+      // console.log(response.data.data.user.email)
+      // console.log(response.data.data.user.id)
+      // console.log(response.data.data.user.role)
+      // console.log(response.data.data.user.created_at)
     }
   }
 

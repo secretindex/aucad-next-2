@@ -5,7 +5,11 @@ import { FC } from "react"
 const Pensionistas: FC = () => {
   return (
     <>
-      <RegisterPage title="Ativos" category="active" documents={pensionerObj} />
+      <RegisterPage
+        title="Pensionistas"
+        category="pensioner"
+        documents={pensionerObj}
+      />
     </>
   )
 }

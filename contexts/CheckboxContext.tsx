@@ -1,3 +1,5 @@
+"use client"
+
 import React, { Dispatch, SetStateAction, useState, createContext, ReactNode } from "react"
 import { RequiredDocs } from "../utils/docsInterface"
 

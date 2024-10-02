@@ -6,8 +6,8 @@ const Inativos: FC = () => {
   return (
     <>
       <RegisterPage
-        title="Ativos"
-        category="active"
+        title="Inativos"
+        category="inactive"
         documents={inactiveDocuments}
       />
     </>

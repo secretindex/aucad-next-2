@@ -81,7 +81,7 @@ const RegisterPage: React.FC<RegisterPageProps> = ({
   }
 
   return (
-    <Content className="flex flex-col gap-2 p-10 justify-center items-center max-h-full">
+    <Content className="flex flex-col gap-2 p-10 justify-center items-center">
       <Row className="p-2 h-60 justify-center">
         <Col span={optionsWidth ? 30 : 18}>
           <Space direction="vertical" size="middle" className="flex w-full">

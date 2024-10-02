@@ -8,6 +8,13 @@ import { ConfigProvider } from "antd"
 
 import localFont from "next/font/local"
 import "./globals.css"
+import NoAntHeader from "@/components/HeaderNoAnt"
+import CheckboxContextProvider from "@/contexts/CheckboxContext"
+import { InactivesContextProvider } from "@/contexts/Inactivescontext"
+import { PensionerContextProvider } from "@/contexts/PensionerContext"
+import { SecondCheckboxContextProvider } from "@/contexts/SecondCheckboxContext"
+import TextFieldContextProvider from "@/contexts/TextfieldContext"
+import PasteTextContextProvider from "@/contexts/PasteTextContext"
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -28,31 +35,43 @@ export const metadata: Metadata = {
 export default function RootLayout({
   children,
 }: Readonly<{
-  children: React.ReactNode,
+  children: React.ReactNode
 }>) {
   return (
     <html lang="en" className="h-screen">
       <body
         className={`${geistSans.variable} ${geistMono.variable} h-screen antialiased`}
       >
-        <AntdRegistry>
-          <ConfigProvider
-            componentSize="large"
-            theme={{
-              token: {
-                colorPrimary: "#26a69a",
-                fontFamily: "sans-serif",
-              },
-            }}
-          >
-            <SessionWrapper>
-              <main className="h-full flex flex-col">
-                <HeaderMenu />
-                {children}
-              </main>
-            </SessionWrapper>
-          </ConfigProvider>
-        </AntdRegistry>
+        <CheckboxContextProvider>
+          <InactivesContextProvider>
+            <PensionerContextProvider>
+              <SecondCheckboxContextProvider>
+                <TextFieldContextProvider>
+                  <PasteTextContextProvider>
+                    <AntdRegistry>
+                      <ConfigProvider
+                        componentSize="large"
+                        theme={{
+                          token: {
+                            colorPrimary: "#26a69a",
+                            fontFamily: "sans-serif",
+                          },
+                        }}
+                      >
+                        <SessionWrapper>
+                          <main className="h-full flex flex-col">
+                            <NoAntHeader />
+                            {children}
+                          </main>
+                        </SessionWrapper>
+                      </ConfigProvider>
+                    </AntdRegistry>
+                  </PasteTextContextProvider>
+                </TextFieldContextProvider>
+              </SecondCheckboxContextProvider>
+            </PensionerContextProvider>
+          </InactivesContextProvider>
+        </CheckboxContextProvider>
       </body>
     </html>
   )

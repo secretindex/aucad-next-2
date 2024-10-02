@@ -1,36 +1,35 @@
-'use server'
+"use server"
 
-import { revalidatePath } from 'next/cache'
-import { redirect } from 'next/navigation'
+import { revalidatePath } from "next/cache"
+import { redirect } from "next/navigation"
 
-import { createClient } from '@/lib/supabase/ssr/ssrServer'
+import { createClient } from "@/lib/supabase/ssr/ssrServer"
 
 export async function login(formData: FormData) {
   const supabase = createClient()
 
   const data = {
-    email: formData.get('email') as string,
-    password: formData.get('password') as string,
+    email: formData.get("email") as string,
+    password: formData.get("password") as string,
   }
 
   const { error } = await supabase.auth.signInWithPassword(data)
 
-  console.log(error)
-
   if (error) {
-    redirect('/error')
+    console.log(error)
+    redirect("/error")
   }
 
-  revalidatePath('/', 'layout')
-  redirect('/')
+  revalidatePath("/", "layout")
+  redirect("/")
 }
 
 export async function signup(formData: FormData) {
   const supabase = createClient()
 
   const data = {
-    email: formData.get('email') as string,
-    password: formData.get('password') as string,
+    email: formData.get("email") as string,
+    password: formData.get("password") as string,
   }
 
   console.log(data)
@@ -40,9 +39,10 @@ export async function signup(formData: FormData) {
   console.log(error)
 
   if (error) {
-    redirect('/error')
+    console.log("frescura do caralhooooooooooo!!!!!")
+    redirect("/error")
   }
 
-  revalidatePath('/', 'layout')
+  revalidatePath("/", "layout")
   redirect("/")
 }

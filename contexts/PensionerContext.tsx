@@ -1,3 +1,5 @@
+"use client"
+
 import {
   createContext,
   ReactNode,
@@ -14,7 +16,7 @@ export const pensionerContextDocs: PensionerDocuments = {
   residencia: "cr/n",
   estadoCivil: "cns/nr",
   pis: "pis/nr",
-  inacPen: false,
+  inacPen: "dips/n",
   decIRPF: "dirpf/n"
 }
 
