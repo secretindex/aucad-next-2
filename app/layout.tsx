@@ -1,6 +1,5 @@
 import type { Metadata } from "next"
 
-import HeaderMenu from "@/components/Menu"
 import { AntdRegistry } from "@ant-design/nextjs-registry"
 import SessionWrapper from "@/components/SessionWrapper"
 
