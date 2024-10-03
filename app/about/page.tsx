@@ -39,6 +39,7 @@ const About = () => {
           Acesse as dicas e o tutorial aqui
         </Text>
       </Link>
+      <Link href={"/profile"}>Profile</Link>
       <Text style={{ margin: "0 0 0.5rem 0" }}>
         Baixe e modifique o código como quiser. Acesse o link do Repositório
         abaixo.
