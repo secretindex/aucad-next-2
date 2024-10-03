@@ -4,15 +4,17 @@ import { useState, BaseSyntheticEvent, useEffect } from "react"
 import Link from "next/link"
 import axios from "axios"
 import Image from "next/image"
-import AucadIcon from "../../../public/assets/aucad ico.jpg"
+import AucadIcon from "../../../public/assets/aucad round corners.png"
 
 import { signup } from "./actions"
+import { AlertOutlined } from "@ant-design/icons"
 
 const Register = () => {
   const [email, setEmail] = useState<string>("")
   const [password, setPassword] = useState<string>("")
   const [confirmPassword, setConfirmPassword] = useState<string>("")
   const [error, setError] = useState<string>("")
+  const [message, setMessage] = useState<string>("")
 
   const handleChange = (field: string, val: string) => {
     if (field === "email") {
@@ -64,7 +66,7 @@ const Register = () => {
           <Image
             src={AucadIcon}
             alt="aucad icon"
-            className="block m-auto rounded-full border-[1px] border-[#000] shadow-md"
+            className="block m-auto rounded-md border-[1px] border-[#000] shadow-md"
             width={50}
             height={50}
           />
@@ -138,6 +140,13 @@ const Register = () => {
           </div>
         </form>
       </div>
+      {message ? (
+        <div className="absolute bottom-2 right-2 rounded-md shadow-md">
+          <AlertOutlined /> {message}
+        </div>
+      ) : (
+        <></>
+      )}
     </section>
   )
 }

@@ -8,7 +8,7 @@ import { useRouter } from "next/navigation"
 import { BaseSyntheticEvent, useState } from "react"
 import { login } from "../register/actions"
 
-import AucadIcon from "../../../public/assets/aucad ico.jpg"
+import AucadIcon from "../../../public/assets/aucad round corners.png"
 import Image from "next/image"
 
 const Login = () => {
@@ -47,7 +47,7 @@ const Login = () => {
           <Image
             src={AucadIcon}
             alt="aucad icon"
-            className="block m-auto rounded-full border-[1px] border-[#000] shadow-md"
+            className="block m-auto rounded-md border-[1px] border-[#000] shadow-md"
             width={50}
             height={50}
           />
