@@ -6,43 +6,61 @@ import {
   UserDeleteOutlined,
   UserOutlined,
   LoginOutlined,
+  LogoutOutlined,
 } from "@ant-design/icons"
 
 import Image from "next/image"
 import Link from "next/link"
 
-import { createClient } from "@/lib/supabase/ssr/ssrServer"
+import { createClient } from "@/lib/supabase/ssr/ssrClient"
 import { logout } from "@/app/auth/logout/actions"
+import { useEffect, useState } from "react"
+import { AuthError, User } from "@supabase/supabase-js"
 
-export default async function NoAntHeader() {
+export default function NoAntHeader() {
   const supabase = createClient()
-  const { data, error } = await supabase.auth.getUser()
 
-  const handleLogout = () => {
-    logout()
+  const [dbData, setDbData] = useState<{ user: User } | { user: null }>({
+    user: null,
+  })
+  const [dbError, setDbError] = useState<AuthError | null>(null)
+
+  async function getUserFromDb() {
+    const { data, error } = await supabase.auth.getUser()
+
+    data ? setDbData(data) : setDbData({ user: null })
+    error ? setDbError(error) : setDbError(null)
+
+    console.log(data, error)
   }
+
+  useEffect(() => {
+    getUserFromDb()
+  }, [dbData.user])
 
   return (
     <header className="flex border-b-[1px] border-[#cecece60] flex-row justify-between items-center gap-2 py-[0.6rem] text-sm px-4">
       <div>
         <h1>
-          <Image
-            src={"/assets/aucad.svg"}
-            alt="logo"
-            width={100}
-            height={16}
-            draggable="false"
-          />
+          <Link href={"/"}>
+            <Image
+              src={"/assets/aucad.svg"}
+              alt="logo"
+              width={100}
+              height={16}
+              draggable="false"
+            />
+          </Link>
         </h1>
       </div>
-      <ul className="flex h-full flex-row transition-all ease-in-out items-center gap-4 text-gray-700">
+      <ul className="flex h-full w-4/6 flex-row transition-all justify-center ease-in-out items-center gap-4 text-gray-700">
         <li className="h-full">
           <Link
             href="/cad/ativos"
             className="text-inherit transition-all ease-in-out hover:text-[#26a69a]"
           >
             <UserOutlined className="mr-2" />
-            Ativos
+            <div className="md:hidden">Ativos</div>
           </Link>
         </li>
         <li className="h-full">
@@ -51,7 +69,7 @@ export default async function NoAntHeader() {
             className="text-inherit transition-all ease-in-out hover:text-[#26a69a]"
           >
             <UserDeleteOutlined className="mr-2" />
-            Inativos
+            <div className="md:hidden">Inativos</div>
           </Link>
         </li>
         <li className="h-full">
@@ -60,7 +78,7 @@ export default async function NoAntHeader() {
             className="text-inherit transition-all ease-in-out hover:text-[#26a69a]"
           >
             <ProfileOutlined className="mr-2" />
-            Pensionistas
+            <div className="md:hidden">Pensionistas</div>
           </Link>
         </li>
       </ul>
@@ -71,10 +89,10 @@ export default async function NoAntHeader() {
             className="text-inherit transition-all ease-in-out hover:text-[#26a69a]"
           >
             <QuestionCircleOutlined className="mr-2" />
-            Sobre
+            <span>Sobre</span>
           </Link>
         </li>
-        {error || !data.user ? (
+        {dbError !== null ? (
           <li className="h-full">
             <Link
               href="/auth/login"
@@ -86,15 +104,13 @@ export default async function NoAntHeader() {
           </li>
         ) : (
           <li className="h-full">
-            <form>
-              <button
-                onClick={handleLogout}
-                className="text-inherit transition-all ease-in-out hover:text-[#26a69a]"
-              >
-                <LoginOutlined className="mr-2" />
-                Logout
-              </button>
-            </form>
+            <button
+              onClick={() => logout()}
+              className="text-inherit transition-all ease-in-out hover:text-[#26a69a]"
+            >
+              <LogoutOutlined className="mr-2" />
+              Logout
+            </button>
           </li>
         )}
       </ul>
