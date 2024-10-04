@@ -28,6 +28,8 @@ export async function signup(formData: FormData) {
   const supabase = createClient()
 
   const fData = {
+    first_name: formData.get("first_name") as string,
+    last_name: formData.get("last_name") as string,
     email: formData.get("email") as string,
     password: formData.get("password") as string,
   }
@@ -37,8 +39,8 @@ export async function signup(formData: FormData) {
     password: fData.password,
     options: {
       data: {
-        first_name: "Caio",
-        last_name: "Programas",
+        first_name: fData.first_name,
+        last_name: fData.last_name,
         avatar_url: "",
         admin: false,
       },
@@ -46,11 +48,11 @@ export async function signup(formData: FormData) {
   })
 
   console.log(data)
+  console.log(fData)
   console.log(error)
 
   if (error) {
-    console.log("frescura do caralhooooooooooo!!!!!")
-    redirect("/error")
+    return error.message
   }
 
   revalidatePath("/", "layout")
