@@ -6,7 +6,7 @@ import Image from "next/image"
 import { useEffect, useState } from "react"
 
 const ProfilePage = () => {
-  const [editable, setEditable] = useState<boolean>(false)
+  const [disabled, setDisabled] = useState<boolean>(true)
   const [metadata, setMetadata] = useState<UserMetadata | undefined>(undefined)
   const [user, setUser] = useState<User | undefined>(undefined)
   const supabase = createClient()
@@ -22,6 +22,26 @@ const ProfilePage = () => {
   useEffect(() => {
     getUser()
   })
+
+  const handleSubmit = async (formData: FormData) => {
+    console.log("edited")
+    const updateUser = {
+      first_name: formData.get("first_name") as string,
+      last_name: formData.get("last_name") as string,
+    }
+
+    const { error } = await supabase
+      .from("profiles")
+      .update({
+        fisrt_name: updateUser.first_name,
+        last_name: updateUser.last_name,
+      })
+      .eq("id", user?.id)
+
+    if (error) {
+      console.error("Erro ao atualizar imagem do perfil:", error)
+    }
+  }
 
   return (
     <section className="h-full flex flex-col justify-center items-center">
@@ -50,8 +70,8 @@ const ProfilePage = () => {
               type="text"
               name="first_name"
               id="first_name"
-              disabled={editable ? false : true}
-              className="border-[1px] border-[#bebebe30] px-4 py-[0.3rem] rounded-md"
+              disabled={disabled}
+              className="border-[1px] border-[#bebebe30] outline-none px-4 py-[0.3rem] rounded-md"
               value={metadata && metadata!.first_name}
             />
           </div>
@@ -61,11 +81,27 @@ const ProfilePage = () => {
               type="text"
               name="last_name"
               id="last_name"
-              disabled={editable ? false : true}
-              className="border-[1px] border-[#bebebe30] px-4 py-[0.3rem] rounded-md"
+              disabled={disabled}
+              className="border-[1px] border-[#bebebe30] outline-none px-4 py-[0.3rem] rounded-md"
               value={metadata && metadata!.last_name}
             />
           </div>
+        </div>
+        <div className="w-full flex gap-2 justify-end">
+          <button
+            onClick={() => setDisabled((prev) => !prev)}
+            className="border-[1px] border-[#aeaeae40] px-4 py-[0.3rem] rounded-md transition-all ease-in-out hover:bg-slate-100"
+          >
+            Edit
+          </button>
+          {!disabled && (
+            <button
+              formAction={handleSubmit}
+              className="px-4 py-[0.3rem] text-white outline-none rounded-md bg-[#26a69a] transition-all ease-in-out hover:bg-[#2fbaac]"
+            >
+              Submit
+            </button>
+          )}
         </div>
       </div>
     </section>
