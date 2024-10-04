@@ -63,13 +63,15 @@ const Login = () => {
           </button>
         </div>
         <hr />
-        <form className="flex flex-col gap-2 w-full px-4">
-          <div className="w-full">
+        <form className="flex flex-col gap-[0.6rem] w-full px-4">
+          <div className="w-full flex flex-col gap-[0.2rem]">
+            <label className="text-gray-500">E-mail</label>
             <input
               type="email"
               name="email"
               id="email"
-              className="border-[1px] outline-none w-full rounded-md bg-gray-50 px-4 py-2"
+              autoComplete="false"
+              className="border-[1px] border-[#bebebe50] outline-none w-full px-4 py-[0.4rem] rounded-md"
               placeholder="Digite seu e-mail"
               value={email}
               onChange={(e: BaseSyntheticEvent) =>
@@ -77,12 +79,22 @@ const Login = () => {
               }
             />
           </div>
-          <div className="w-full">
+          <div className="w-full flex flex-col gap-[0.2rem]">
+            <div className="flex flex-row justify-between">
+              <label className="text-gray-500">Senha</label>
+              <Link
+                className="text-[#26a69a] transition-all duration-150 ease-in-out hover:underline"
+                href={"/profile/change-password"}
+              >
+                Esqueci a senha
+              </Link>
+            </div>
             <input
               type="password"
               name="password"
               id="password"
-              className="border-[1px] outline-none w-full rounded-md bg-gray-50 px-4 py-2"
+              autoComplete="false"
+              className="border-[1px] border-[#bebebe50] outline-none w-full px-4 py-[0.4rem] rounded-md"
               placeholder="Digite sua senha"
               value={password}
               onChange={(e: BaseSyntheticEvent) =>
