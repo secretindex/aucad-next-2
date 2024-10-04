@@ -36,7 +36,7 @@ export default function NoAntHeader() {
 
   useEffect(() => {
     getUserFromDb()
-  }, [dbData.user])
+  }, [])
 
   return (
     <header className="flex border-b-[1px] border-[#cecece60] flex-row justify-between items-center gap-2 py-[0.6rem] text-sm px-4">
