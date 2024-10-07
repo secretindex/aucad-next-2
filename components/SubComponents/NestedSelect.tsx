@@ -59,6 +59,7 @@ const NestedSelect: React.FC<NestedSelectProps> = ({
 
   return (
     <Cascader
+      style={{ padding: "0" }}
       options={options}
       onChange={onChange}
       placeholder="Please select"

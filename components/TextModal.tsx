@@ -85,8 +85,10 @@ const TextModal: React.FC<TextModalProps> = ({ category }) => {
   }
 
   const handleClick = (e: any) => {
-    if (e.target!.closest("div").classList.contains("click-text")) {
-      console.log(e.target!.closest("div").classList.contains("click-text"))
+    const closestDiv = (e.target as HTMLElement).closest("div")
+
+    if (closestDiv && closestDiv.classList.contains("click-text")) {
+      console.log(closestDiv.classList.contains("click-text"))
       handlePasteText()
     }
 

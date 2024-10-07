@@ -10,7 +10,7 @@ const DocumentOptions: React.FC<DocumentosOptionsProps> = ({
 }) => {
   return (
     <Col span={8}>
-      <Form.Item className=" w-full m-0 overflow-clip">
+      <Form.Item className="w-full m-0 overflow-clip">
         <label className=" text-gray-500 text-nowrap">{name}</label>
         <SelectComponent
           optionList={optionList}

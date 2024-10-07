@@ -9,6 +9,10 @@ const ProfilePage = () => {
   const [disabled, setDisabled] = useState<boolean>(true)
   const [metadata, setMetadata] = useState<UserMetadata | undefined>(undefined)
   const [user, setUser] = useState<User | undefined>(undefined)
+  const [editUser, setEditUser] = useState({
+    name: "",
+    lastName: "",
+  })
   const supabase = createClient()
 
   const getUser = async () => {

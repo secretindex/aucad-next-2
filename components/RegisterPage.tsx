@@ -81,16 +81,16 @@ const RegisterPage: React.FC<RegisterPageProps> = ({
   }
 
   return (
-    <Content className="flex flex-col gap-2 p-10 justify-center items-center">
-      <Row className="p-2 h-60 justify-center">
+    <Content className="flex flex-col p-10 justify-center items-center">
+      <Row className="p-2 h-32 justify-center">
         <Col span={optionsWidth ? 30 : 18}>
-          <Space direction="vertical" size="middle" className="flex w-full">
+          <Space direction="vertical" size="small" className="flex w-full">
             <Content className="w-full flex justify-center">
               <Typography.Title className="title-bg uppercase" level={4}>
                 {title}
               </Typography.Title>
             </Content>
-            <Row key={pathname} gutter={[16, 8]}>
+            <Row key={pathname} gutter={[12, 2]}>
               {documents &&
                 Object.keys(documents as {}).map((doc: string) => {
                   return (

@@ -49,7 +49,7 @@ const SelectComponent: FC<DocumentosOptionsProps> = ({
   // Default
   if (!optionList) {
     return (
-      <Select value={field} onChange={handleChange}>
+      <Select style={{ padding: "0" }} value={field} onChange={handleChange}>
         <Option key="sim" value="sim">
           Sim
         </Option>

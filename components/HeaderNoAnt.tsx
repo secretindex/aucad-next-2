@@ -23,6 +23,7 @@ export default function NoAntHeader() {
   const [dbData, setDbData] = useState<{ user: User } | { user: null }>({
     user: null,
   })
+
   const [dbError, setDbError] = useState<AuthError | null>(null)
 
   async function getUserFromDb() {
@@ -60,7 +61,7 @@ export default function NoAntHeader() {
             className="text-inherit transition-all ease-in-out hover:text-[#26a69a]"
           >
             <UserOutlined className="mr-2" />
-            <div className="md:hidden">Ativos</div>
+            <div className="md:inline hidden">Ativos</div>
           </Link>
         </li>
         <li className="h-full">
@@ -69,7 +70,7 @@ export default function NoAntHeader() {
             className="text-inherit transition-all ease-in-out hover:text-[#26a69a]"
           >
             <UserDeleteOutlined className="mr-2" />
-            <div className="md:hidden">Inativos</div>
+            <div className="md:inline hidden">Inativos</div>
           </Link>
         </li>
         <li className="h-full">
@@ -78,7 +79,7 @@ export default function NoAntHeader() {
             className="text-inherit transition-all ease-in-out hover:text-[#26a69a]"
           >
             <ProfileOutlined className="mr-2" />
-            <div className="md:hidden">Pensionistas</div>
+            <div className="md:inline hidden">Pensionistas</div>
           </Link>
         </li>
       </ul>
@@ -89,7 +90,7 @@ export default function NoAntHeader() {
             className="text-inherit transition-all ease-in-out hover:text-[#26a69a]"
           >
             <QuestionCircleOutlined className="mr-2" />
-            <span>Sobre</span>
+            <span className="lg:inline hidden">Sobre</span>
           </Link>
         </li>
         {dbError !== null ? (
@@ -99,7 +100,7 @@ export default function NoAntHeader() {
               className="text-inherit transition-all ease-in-out hover:text-[#26a69a]"
             >
               <LoginOutlined className="mr-2" />
-              Login
+              <span className="lg:inline hidden">Login</span>
             </Link>
           </li>
         ) : (
@@ -109,7 +110,7 @@ export default function NoAntHeader() {
               className="text-inherit transition-all ease-in-out hover:text-[#26a69a]"
             >
               <LogoutOutlined className="mr-2" />
-              Logout
+              <span className="lg:inline hidden">Logout</span>
             </button>
           </li>
         )}

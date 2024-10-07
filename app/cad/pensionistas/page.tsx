@@ -4,13 +4,13 @@ import { FC } from "react"
 
 const Pensionistas: FC = () => {
   return (
-    <>
+    <section className="h-full">
       <RegisterPage
         title="Pensionistas"
         category="pensioner"
         documents={pensionerObj}
       />
-    </>
+    </section>
   )
 }
 
