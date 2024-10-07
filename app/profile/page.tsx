@@ -28,7 +28,7 @@ const ProfilePage = () => {
     getUser()
   })
 
-  const handleChange = (e, field: "name" | "firstName") => {
+  const handleChange = (e: any, field: "name" | "firstName") => {
     // setEditUser(prev => { prev..., field: e.target.value })
   }
 
@@ -80,7 +80,7 @@ const ProfilePage = () => {
               name="first_name"
               id="first_name"
               disabled={disabled}
-              onChange={handleChange}
+              // onChange={handleChange}
               className="border-[1px] border-[#bebebe30] outline-none px-4 py-[0.3rem] rounded-md"
               value={disabled ? (metadata && metadata!.last_name) : editUser.name}
             />
