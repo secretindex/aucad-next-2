@@ -4,25 +4,17 @@ import { ReloadOutlined } from "@ant-design/icons"
 
 import DocumentOptions from "./SubComponents/DocumentOptions"
 
-import React, { useContext, useEffect, useState } from "react"
+import React, { useEffect, useState } from "react"
 import { FloatButton, Typography, Row, Col, Space, Layout } from "antd"
 import TextModal from "./TextModal"
 
 import { ActivesDocs, InactivesInt, PensionerDocs } from "@/utils/docsInterface"
-import {
-  documentsContext,
-  SecondCheckboxContext,
-} from "@/contexts/SecondCheckboxContext"
-import { InactivesContext, inactivesDefault } from "@/contexts/Inactivescontext"
-import {
-  PensionerContext,
-  pensionerContextDocs,
-} from "@/contexts/PensionerContext"
-import { TextFieldContext } from "@/contexts/TextfieldContext"
-
 import { usePathname } from "next/navigation"
 
+import useAppReset from "@/utils/useAppReset"
+
 import { Category } from "./SubComponents/types/essentialTypes"
+import RegisterCounter from "./RegisterCounter"
 
 interface RegisterPageProps {
   category: Category
@@ -37,28 +29,11 @@ const RegisterPage: React.FC<RegisterPageProps> = ({
   title,
   documents,
 }) => {
-  const globalDocs = useContext(SecondCheckboxContext)
-  const pensionerDocs = useContext(PensionerContext)
-  const inactiveDocs = useContext(InactivesContext)
-
-  const pathname = usePathname()
-
-  const textField = useContext(TextFieldContext)
   const [optionsWidth, setOptionsWidth] = useState<boolean>(false)
 
-  const statusReset = () => {
-    textField?.setText("")
+  const reset = useAppReset(category)
 
-    if (category === "active") {
-      globalDocs?.setDocs(() => documentsContext)
-    }
-    if (category === "pensioner") {
-      pensionerDocs?.setDocs(pensionerContextDocs)
-    }
-    if (category === "inactive") {
-      inactiveDocs?.setDocs(inactivesDefault)
-    }
-  }
+  const pathname = usePathname()
 
   useEffect(() => {
     window.addEventListener("resize", () => {
@@ -70,12 +45,12 @@ const RegisterPage: React.FC<RegisterPageProps> = ({
     })
 
     return () => {
-      statusReset()
+      reset()
     }
   }, [pathname])
 
   const restartAction = () => {
-    statusReset()
+    reset()
 
     window.location.reload()
   }
@@ -90,7 +65,7 @@ const RegisterPage: React.FC<RegisterPageProps> = ({
                 {title}
               </Typography.Title>
             </Content>
-            <Row key={pathname} gutter={[12, 2]}>
+            <Row key={pathname} gutter={[16, 8]}>
               {documents &&
                 Object.keys(documents as {}).map((doc: string) => {
                   return (
@@ -117,6 +92,7 @@ const RegisterPage: React.FC<RegisterPageProps> = ({
         style={{ border: "1px solid #adadad" }}
         onClick={() => restartAction()}
       />
+      <RegisterCounter />
     </Content>
   )
 }
