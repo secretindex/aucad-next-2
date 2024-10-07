@@ -13,6 +13,7 @@ const ProfilePage = () => {
     name: "",
     lastName: "",
   })
+
   const supabase = createClient()
 
   const getUser = async () => {
@@ -26,6 +27,10 @@ const ProfilePage = () => {
   useEffect(() => {
     getUser()
   })
+
+  const handleChange = (e, field: "name" | "firstName") => {
+    // setEditUser(prev => { prev..., field: e.target.value })
+  }
 
   const handleSubmit = async (formData: FormData) => {
     console.log("edited")
@@ -75,8 +80,9 @@ const ProfilePage = () => {
               name="first_name"
               id="first_name"
               disabled={disabled}
+              onChange={handleChange}
               className="border-[1px] border-[#bebebe30] outline-none px-4 py-[0.3rem] rounded-md"
-              value={metadata && metadata!.first_name}
+              value={disabled ? (metadata && metadata!.last_name) : editUser.name}
             />
           </div>
           <div className="flex flex-col gap-2 w-full">
@@ -87,7 +93,7 @@ const ProfilePage = () => {
               id="last_name"
               disabled={disabled}
               className="border-[1px] border-[#bebebe30] outline-none px-4 py-[0.3rem] rounded-md"
-              value={metadata && metadata!.last_name}
+              value={disabled ? (metadata && metadata!.last_name) : editUser.lastName}
             />
           </div>
         </div>
