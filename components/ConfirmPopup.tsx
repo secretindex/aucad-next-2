@@ -3,7 +3,6 @@
 import { FC, useContext } from "react"
 import useAppReset from "@/utils/useAppReset"
 import { Category } from "./SubComponents/types/essentialTypes"
-// import { useRouter } from "next/router"
 import { RegisterCounterContext } from "@/contexts/RegisterCountContext"
 
 interface ConfirmProps {
