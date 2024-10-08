@@ -1,7 +1,6 @@
 import type { Metadata } from "next"
 
 import { AntdRegistry } from "@ant-design/nextjs-registry"
-import SessionWrapper from "@/components/SessionWrapper"
 
 import { ConfigProvider } from "antd"
 
@@ -59,12 +58,10 @@ export default function RootLayout({
                             },
                           }}
                         >
-                          <SessionWrapper>
-                            <main className="h-full flex flex-col">
-                              <NoAntHeader />
-                              {children}
-                            </main>
-                          </SessionWrapper>
+                          <main className="h-full flex flex-col">
+                            <NoAntHeader />
+                            {children}
+                          </main>
                         </ConfigProvider>
                       </AntdRegistry>
                     </PasteTextContextProvider>
