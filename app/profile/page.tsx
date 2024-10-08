@@ -32,6 +32,8 @@ const ProfilePage = () => {
     // setEditUser(prev => { prev..., field: e.target.value })
   }
 
+  const changeProfileImage = () => {}
+
   const handleSubmit = async (formData: FormData) => {
     console.log("edited")
     const updateUser = {
@@ -56,6 +58,24 @@ const ProfilePage = () => {
     <section className="h-full flex flex-col justify-center items-center">
       <div className="w-1/2 h-1/2 flex flex-col gap-8 justify-center">
         <div className="mx-auto">
+          <input
+            className="hidden"
+            type="file"
+            name="profile_image"
+            id="profile_image"
+          >
+            <Image
+              src={
+                metadata && metadata!.avatar_url
+                  ? metadata!.avatar_url
+                  : "https://i.pinimg.com/236x/1a/84/02/1a8402aa701a7a262958c9b8fb4735e9.jpg"
+              }
+              className="block mx-auto mb-2 rounded-full"
+              width={100}
+              height={100}
+              alt="profile image"
+            />
+          </input>
           <Image
             src={
               metadata && metadata!.avatar_url
@@ -82,7 +102,9 @@ const ProfilePage = () => {
               disabled={disabled}
               // onChange={handleChange}
               className="border-[1px] border-[#bebebe30] outline-none px-4 py-[0.3rem] rounded-md"
-              value={disabled ? (metadata && metadata!.last_name) : editUser.name}
+              value={
+                disabled ? metadata && metadata!.first_name : editUser.name
+              }
             />
           </div>
           <div className="flex flex-col gap-2 w-full">
@@ -93,7 +115,9 @@ const ProfilePage = () => {
               id="last_name"
               disabled={disabled}
               className="border-[1px] border-[#bebebe30] outline-none px-4 py-[0.3rem] rounded-md"
-              value={disabled ? (metadata && metadata!.last_name) : editUser.lastName}
+              value={
+                disabled ? metadata && metadata!.last_name : editUser.lastName
+              }
             />
           </div>
         </div>

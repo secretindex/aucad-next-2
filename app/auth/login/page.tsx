@@ -1,8 +1,6 @@
 "use client"
 
 import { GoogleOutlined } from "@ant-design/icons"
-import axios from "axios"
-import { signIn } from "next-auth/react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { BaseSyntheticEvent, useState } from "react"
@@ -26,17 +24,8 @@ const Login = () => {
     }
   }
 
-  const handleSubmit = async (e: BaseSyntheticEvent) => {
-    e.preventDefault()
-    console.log(email, password)
-
-    const res = await axios.get("/api/users")
-
-    console.log(res.data)
-  }
-
   const handleLogin = () => {
-    signIn("google")
+    // signIn("google")
     router.push("/")
   }
 

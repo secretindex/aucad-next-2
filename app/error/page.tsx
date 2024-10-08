@@ -1,4 +1,6 @@
-const ErrorPage = () => {
+import { FC } from "react"
+
+const ErrorPage: FC = () => {
   return (
     <section className="h-full flex flex-col items-center justify-center">
       <div className="">

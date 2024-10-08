@@ -2,11 +2,9 @@
 
 import { useState, BaseSyntheticEvent, useEffect } from "react"
 import Link from "next/link"
-import axios from "axios"
 
 import { signup } from "./actions"
 import { AlertOutlined } from "@ant-design/icons"
-import { signIn } from "next-auth/react"
 import LoadingSpin from "@/components/LoadingSpin"
 
 const Register = () => {
@@ -36,6 +34,10 @@ const Register = () => {
   }, [password, confirmPassword])
 
   const handleRegister = async (formData: FormData) => {
+    if (password.length < 6) {
+      setError("Senha menor que 6 dígitos")
+    }
+
     setLoading(true)
     console.log(loading)
 
@@ -43,31 +45,6 @@ const Register = () => {
       setLoading(false)
       setMessage(msg)
     })
-  }
-
-  const handleSubmit = async (e: any) => {
-    e.preventDefault()
-
-    if (error) return
-
-    const login = { email, password }
-
-    const response = await axios.post("/api/users", login)
-
-    console.log(response.data)
-
-    if (response.data.error) {
-      console.warn(
-        `${response.data.error.code} and ${response.data.error.name}`
-      )
-    } else {
-      console.log(`${response.data.message} and ${response.data.data.user}\n\n`)
-
-      // console.log(response.data.data.user.email)
-      // console.log(response.data.data.user.id)
-      // console.log(response.data.data.user.role)
-      // console.log(response.data.data.user.created_at)
-    }
   }
 
   return (
