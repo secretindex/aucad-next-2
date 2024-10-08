@@ -6,13 +6,14 @@ import { useRouter } from "next/navigation"
 import { BaseSyntheticEvent, useState } from "react"
 import { login } from "../register/actions"
 
+import { createClient } from "@/lib/supabase/ssr/ssrClient"
+
 import AucadIcon from "../../../public/assets/aucad round corners.png"
 import Image from "next/image"
 
 const Login = () => {
   const [email, setEmail] = useState<string>("")
   const [password, setPassword] = useState<string>("")
-  // const [errorMessage, setErrorMessage] = useState<string>("")
 
   const router = useRouter()
 
@@ -24,8 +25,15 @@ const Login = () => {
     }
   }
 
-  const handleLogin = () => {
-    // signIn("google")
+  const handleLogin = async () => {
+    const supabase = createClient()
+
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: "google",
+    })
+
+    if (error) alert(error)
+
     router.push("/")
   }
 

@@ -37,23 +37,31 @@ export async function signup(formData: FormData) {
   const { data, error } = await supabase.auth.signUp({
     email: fData.email,
     password: fData.password,
-    options: {
-      data: {
-        first_name: fData.first_name,
-        last_name: fData.last_name,
-        avatar_url: "",
-        admin: false,
-      },
-    },
   })
 
-  console.log(data)
-  console.log(fData)
-  console.log(error)
-
   if (error) {
+    console.error(error)
     return error.message
   }
+
+  // const user = data.user
+
+  // const { data: profileData, error: profileError } = await supabase
+  //   .from("profiles")
+  //   .insert([
+  //     {
+  //       id: user!.id,
+  //       username: fData.first_name + " " + fData.last_name,
+  //       first_name: fData.first_name,
+  //       last_name: fData.last_name,
+  //       avatar_url: "",
+  //       admin: false,
+  //       updatedAt: new Date().toISOString(),
+  //     },
+  //   ])
+
+  // console.log(profileData)
+  // console.log(profileError)
 
   revalidatePath("/", "layout")
   return "Olhe sua lista de emails e confirme sua conta!"

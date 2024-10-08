@@ -1,6 +1,6 @@
 "use client"
 
-import { createContext, useState, Dispatch, SetStateAction, FC, ReactNode } from "react"
+import { createContext, useState, Dispatch, SetStateAction, FC, ReactNode, useEffect } from "react"
 
 export interface RegisterCounterType {
   count: number
@@ -14,7 +14,12 @@ interface ContextProps {
 }
 
 const RegisterCounterContextProvider: FC<ContextProps> = ({ children }) => {
-  const [count, setCount] = useState<number>(Number(localStorage.getItem("count")) || 0)
+  const [count, setCount] = useState<number>(0)
+
+  useEffect(() => {
+    const savedCount = Number(localStorage.getItem("count")) || 0
+    setCount(savedCount)
+  }, [])
 
   return <RegisterCounterContext.Provider value={{ count, setCount }}>{children}</RegisterCounterContext.Provider>
 }

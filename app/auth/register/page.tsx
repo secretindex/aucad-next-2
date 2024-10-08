@@ -38,8 +38,7 @@ const Register = () => {
       setError("Senha menor que 6 dígitos")
     }
 
-    setLoading(true)
-    console.log(loading)
+    setLoading((prev) => !prev)
 
     signup(formData).then((msg) => {
       setLoading(false)

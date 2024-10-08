@@ -1,7 +1,5 @@
 "use client"
 
-// later: remove every antd component except from register page
-
 import { Typography, Layout, List } from "antd"
 import Link from "next/link"
 
