@@ -23,9 +23,13 @@ const nextConfig = {
     return config
   },
   images: {
+    domains: ["yztoeqhpdtotkwltkhsn.supabase.co"],
     remotePatterns: [
       {
         hostname: "i.pinimg.com",
+      },
+      {
+        hostname: "yztoeqhpdtotkwltkhsn.supabase.co",
       },
     ],
   },

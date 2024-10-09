@@ -10,8 +10,12 @@ import LoadingSpin from "@/components/LoadingSpin"
 const Register = () => {
   const [email, setEmail] = useState<string>("")
   const [password, setPassword] = useState<string>("")
+  const [firstName, setFirstName] = useState<string>("")
+  const [lastName, setLastName] = useState<string>("")
   const [confirmPassword, setConfirmPassword] = useState<string>("")
+
   const [error, setError] = useState<string>("")
+
   const [message, setMessage] = useState<string>("")
   const [loading, setLoading] = useState<boolean>(false)
 
@@ -28,6 +32,8 @@ const Register = () => {
   useEffect(() => {
     if (password !== confirmPassword) {
       setError("Senhas não correspondem ⚠️")
+    } else if (password.length > 6 && !error.includes("correspondem")) {
+      setError("")
     } else {
       setError("")
     }
@@ -42,6 +48,9 @@ const Register = () => {
 
     signup(formData).then((msg) => {
       setLoading(false)
+      if (message.includes("new user")) {
+        setMessage("Eu sei que erro é esse. Fala comigo que eu vou ver")
+      }
       setMessage(msg)
     })
   }
@@ -67,6 +76,10 @@ const Register = () => {
                 type="text"
                 name="first_name"
                 id="first_name"
+                value={firstName}
+                onChange={(e: BaseSyntheticEvent) =>
+                  setFirstName(e.target.value)
+                }
                 className="border-[1px] border-[#bebebe50] outline-none w-full px-4 py-[0.4rem] rounded-md"
                 placeholder=""
               />
@@ -77,6 +90,10 @@ const Register = () => {
                 type="text"
                 name="last_name"
                 id="last_name"
+                value={lastName}
+                onChange={(e: BaseSyntheticEvent) =>
+                  setLastName(e.target.value)
+                }
                 className="border-[1px] border-[#bebebe50] outline-none w-full px-4 py-[0.4rem] rounded-md"
                 placeholder=""
               />
@@ -156,17 +173,17 @@ const Register = () => {
       </div>
       {/* Create a component for the modal */}
       {message ? (
-        <div className="absolute bottom-2 px-4 py-[0.8rem] right-2 flex flex-col gap-2 rounded-md shadow-md">
+        <div className="absolute bottom-2 px-4 py-[0.8rem] bg-[#fefefe] right-2 flex flex-col-reverse gap-2 rounded-md shadow-md">
           <div className="flex justify-end">
             <button
               onClick={() => setMessage("")}
-              className="rounded-lg flex justify-center items-center px-2 py-[0.2rem] border-[1px] border-[#bebebe30] "
+              className="rounded-lg flex justify-center items-center px-4 py-[0.2rem] border-[1px] bg-[#26a69a] text-[#fefefe] text-sm border-[#bebebe30] "
             >
-              X
+              Ok
             </button>
           </div>
-          <div className="flex gap-2 items-center">
-            <AlertOutlined /> <span>{message}</span>
+          <div className="flex gap-2 items-center text-wrap w-64">
+            <AlertOutlined /> <span className="text-sm">{message}</span>
           </div>
         </div>
       ) : (

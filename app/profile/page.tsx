@@ -3,21 +3,67 @@
 import EditProfile from "@/components/profile/EditProfile"
 import InfoProfile from "@/components/profile/InfoProfile"
 import { createClient } from "@/lib/supabase/ssr/ssrClient"
-import { User, UserMetadata } from "@supabase/supabase-js"
+import { UserMetadata } from "@supabase/supabase-js"
 import Image from "next/image"
-import { useEffect, useState } from "react"
+import { BaseSyntheticEvent, useEffect, useState } from "react"
 
 const ProfilePage = () => {
   const [disabled, setDisabled] = useState<boolean>(true)
   const [metadata, setMetadata] = useState<UserMetadata | undefined>(undefined)
-  const [user, setUser] = useState<User | undefined>(undefined)
+  const [user, setUser] = useState<any | undefined>(undefined)
+
+  const [avatarUrl, setAvatarUrl] = useState<string>()
 
   const supabase = createClient()
+
+  const handleAvatarChange = async (e: BaseSyntheticEvent) => {
+    const file = e.target.files[0]
+
+    const fileExt = file.name.split(".").pop()
+    const fileName = `${Date.now()}.${fileExt}`
+    const filePath = `avatar/${fileName}`
+
+    const { data, error } = await supabase.storage
+      .from("avatars")
+      .upload(filePath, file)
+
+    if (error) {
+      console.error(error)
+      return `An error occurred: ${error.message}`
+    }
+
+    const { data: urlImageData } = supabase.storage
+      .from("avatars")
+      .getPublicUrl(filePath)
+
+    if (!urlImageData.publicUrl) return "Image not found"
+
+    const { data: profileUpData, error: profileError } = await supabase
+      .from("profiles")
+      .update({ avatar_url: urlImageData.publicUrl })
+      .eq("id", user?.id)
+
+    if (profileError) {
+      console.error(profileError)
+      return `An error occured: ${profileError.message}`
+    }
+
+    console.log(profileUpData)
+    console.log(avatarUrl)
+  }
 
   const getUser = async () => {
     const { data, error } = await supabase.auth.getUser()
     if (!error) {
-      setUser(data.user)
+      const { data: dbUser, error } = await supabase
+        .from("profiles")
+        .select()
+        .eq("id", data.user.id)
+
+      setUser(dbUser![0])
+
+      console.log(user)
+
       setMetadata(data.user?.user_metadata)
     } else {
       console.error("error fetching user: " + error)
@@ -38,16 +84,19 @@ const ProfilePage = () => {
 
     console.log(updateUser)
 
-    const { error } = await supabase
-      .from("profiles")
-      .update({
-        fisrt_name: updateUser.first_name,
-        last_name: updateUser.last_name,
-      })
-      .eq("id", user?.id)
+    if (user) {
+      const { error } = await supabase
+        .from("profiles")
+        .update({
+          first_name: updateUser.first_name,
+          last_name: updateUser.last_name,
+          updated_at: new Date().toISOString(),
+        })
+        .eq("id", user?.id)
 
-    if (error) {
-      console.error("Erro ao atualizar imagem do perfil:", error)
+      if (error) {
+        console.error("Erro ao atualizar dados do perfil:", error)
+      }
     }
   }
 
@@ -57,8 +106,8 @@ const ProfilePage = () => {
         <div className="mx-auto">
           <Image
             src={
-              metadata && metadata!.avatar_url
-                ? metadata!.avatar_url
+              user && user!.avatar_url
+                ? user!.avatar_url
                 : "https://i.pinimg.com/236x/1a/84/02/1a8402aa701a7a262958c9b8fb4735e9.jpg"
             }
             className="block mx-auto mb-2 rounded-full"
@@ -69,9 +118,9 @@ const ProfilePage = () => {
           <div className={`mx-auto w-fit ${disabled ? "hidden" : ""}`}>
             <label
               htmlFor="profile_image"
-              className="text-sm text-center cursor-pointer text-[#26a69a] hover:text-[#3fc5b8] hover:underline"
+              className=" text-xs text-center cursor-pointer text-[#26a69a] hover:text-[#3fc5b8] hover:underline"
             >
-              Change
+              Change image
             </label>
             <input
               accept="image/*"
@@ -79,14 +128,12 @@ const ProfilePage = () => {
               type="file"
               name="profile_image"
               id="profile_image"
+              onChange={handleAvatarChange}
             />
           </div>
-          <h1 className="text-center">
-            Welcome,{" "}
-            {metadata && `${metadata!.first_name} ${metadata!.last_name}`}
-          </h1>
+          <h1 className="text-center">Welcome, {user && user.full_name}</h1>
         </div>
-        {disabled ? <InfoProfile metadata={metadata} /> : <EditProfile />}
+        {disabled ? <InfoProfile user={user} /> : <EditProfile />}
         <div className="w-full flex gap-2 justify-end">
           <button
             onClick={(e) => {
