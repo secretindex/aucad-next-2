@@ -3,7 +3,7 @@ import { createClient } from "@/lib/supabase/ssr/ssrClient"
 const supabase = createClient()
 
 const avatarChange = async (filePath: string, file: any, id: string) => {
-  const { data, error } = await supabase.storage
+  const { data: _data, error } = await supabase.storage
     .from("avatars")
     .upload(filePath, file)
 
@@ -22,7 +22,7 @@ const avatarChange = async (filePath: string, file: any, id: string) => {
   if (!urlImageData.publicUrl)
     return { publicUrl: "", profileError: "Image not found" }
 
-  const { data: profileUpData, error: profileError } = await supabase
+  const { data: _profileUpData, error: profileError } = await supabase
     .from("profiles")
     .update({ avatar_url: urlImageData.publicUrl })
     .eq("id", id)
