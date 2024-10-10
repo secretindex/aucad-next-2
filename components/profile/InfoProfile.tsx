@@ -8,7 +8,7 @@ const InfoProfile: FC<InfoProps> = ({ user }) => {
   return (
     <div className="flex flex-row justify-evenly gap-4">
       <div className="flex flex-col gap-2 w-full">
-        <label className="block">First Name</label>
+        <label className="block">Nome</label>
         <input
           type="text"
           name="first_name"
@@ -19,7 +19,7 @@ const InfoProfile: FC<InfoProps> = ({ user }) => {
         />
       </div>
       <div className="flex flex-col gap-2 w-full">
-        <label className="block">Last Name</label>
+        <label className="block">Sobrenome</label>
         <input
           type="text"
           name="last_name"
