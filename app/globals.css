@@ -114,7 +114,7 @@ body {
   }
 }
 
-.disapear {
+.disappear {
   opacity: 1;
   transform: scale(1);
   animation: disappearing 200ms ease-in-out forwards;

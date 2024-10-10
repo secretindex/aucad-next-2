@@ -19,6 +19,5 @@ export async function logout() {
 
   revalidatePath("/", "layout")
 
-  window.location.reload()
   redirect("/")
 }

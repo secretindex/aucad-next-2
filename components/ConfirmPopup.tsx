@@ -41,7 +41,7 @@ const ConfirmPopup: FC<ConfirmProps> = ({
   return (
     <div
       className={`absolute bottom-2 shadow-md border-[2px] transition-all duration-200 ease-in-out border-[#cecece30] bg-white left-12 p-2 w-48 rounded-[0.4rem] flex flex-col gap-2 ${
-        isVisible ? "appear" : "disapear"
+        isVisible ? "appear" : "disappear"
       }`}
     >
       <div className="font-bold">{title}</div>

@@ -6,7 +6,6 @@ import {
   UserDeleteOutlined,
   UserOutlined,
   LoginOutlined,
-  LogoutOutlined,
 } from "@ant-design/icons"
 
 import Image from "next/image"
@@ -17,6 +16,7 @@ import { logout } from "@/app/auth/logout/actions"
 import { useEffect, useState } from "react"
 import { AuthError, User } from "@supabase/supabase-js"
 import { usePathname } from "next/navigation"
+import ProfileButton from "./ProfileButton"
 
 export default function NoAntHeader() {
   const supabase = createClient()
@@ -26,19 +26,39 @@ export default function NoAntHeader() {
     user: null,
   })
 
+  const [avatarUrl, setAvatarUrl] = useState<string>("")
+
   const [dbError, setDbError] = useState<AuthError | null>(null)
 
   async function getUserFromDb() {
     const { data, error } = await supabase.auth.getUser()
 
-    data ? setDbData(data) : setDbData({ user: null })
-    error ? setDbError(error) : setDbError(null)
+    if (!error && data) {
+      const { data: dbProfile, error: profileError } = await supabase
+        .from("profiles")
+        .select("avatar_url")
+        .eq("id", data.user.id)
 
-    console.log(data, error)
+      if (profileError) {
+        console.error(`Ocorreu um erro: ${profileError.message}`)
+        return
+      }
+
+      if (dbProfile && dbProfile[0]) {
+        console.log(dbProfile)
+        setAvatarUrl(dbProfile[0].avatar_url)
+      }
+
+      data ? setDbData(data) : setDbData({ user: null })
+      error ? setDbError(error) : setDbError(null)
+
+      console.log(data, error)
+    } else {
+      setAvatarUrl("")
+    }
   }
 
   useEffect(() => {
-    console.log(pathname)
     getUserFromDb()
   }, [pathname])
 
@@ -96,7 +116,7 @@ export default function NoAntHeader() {
             <span className="lg:inline hidden">Sobre</span>
           </Link>
         </li>
-        {dbError !== null ? (
+        {dbError !== null || dbData.user === null ? (
           <li className="h-full">
             <Link
               href="/auth/login"
@@ -108,13 +128,7 @@ export default function NoAntHeader() {
           </li>
         ) : (
           <li className="h-full">
-            <button
-              onClick={() => logout()}
-              className="text-inherit transition-all ease-in-out hover:text-[#26a69a]"
-            >
-              <LogoutOutlined className="mr-2" />
-              <span className="lg:inline hidden">Logout</span>
-            </button>
+            <ProfileButton profileImage={avatarUrl} />
           </li>
         )}
       </ul>

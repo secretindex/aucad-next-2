@@ -6,7 +6,7 @@ import { ConfigProvider } from "antd"
 
 import localFont from "next/font/local"
 import "./globals.css"
-import NoAntHeader from "@/components/HeaderNoAnt"
+import NoAntHeader from "@/components/header/HeaderNoAnt"
 import CheckboxContextProvider from "@/contexts/CheckboxContext"
 import { InactivesContextProvider } from "@/contexts/Inactivescontext"
 import { PensionerContextProvider } from "@/contexts/PensionerContext"

@@ -2,7 +2,7 @@ export default function BigLoading() {
   return (
     <>
       <svg
-        className="animate-spin inline h-5 w-5 text-white"
+        className="animate-spin inline h-8 w-8 text-[#26a69a]"
         xmlns="http://www.w3.org/2000/svg"
         fill="none"
         viewBox="0 0 24 24"
@@ -12,7 +12,7 @@ export default function BigLoading() {
           cx="12"
           cy="12"
           r="10"
-          stroke="currentColor"
+          stroke="#26a69a"
           strokeWidth="4"
         ></circle>
         <path

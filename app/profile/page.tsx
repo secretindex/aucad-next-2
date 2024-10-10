@@ -3,8 +3,11 @@
 import EditProfile from "@/components/profile/EditProfile"
 import InfoProfile from "@/components/profile/InfoProfile"
 import { createClient } from "@/lib/supabase/ssr/ssrClient"
-import Image from "next/image"
 import { BaseSyntheticEvent, useEffect, useState } from "react"
+
+import Image from "next/image"
+
+import avatarChange from "./actions"
 
 const ProfilePage = () => {
   const [disabled, setDisabled] = useState<boolean>(true)
@@ -21,32 +24,23 @@ const ProfilePage = () => {
     const fileName = `${Date.now()}.${fileExt}`
     const filePath = `avatar/${fileName}`
 
-    const { data, error } = await supabase.storage
+    const { publicUrl, profileError } = await avatarChange(
+      filePath,
+      file,
+      user.id
+    )
+
+    if (profileError) throw new Error(profileError)
+
+    setAvatarUrl(publicUrl)
+  }
+
+  const removeImage = async () => {
+    const splitUrl = avatarUrl.split("/")
+    const filename = splitUrl[splitUrl.length - 1]
+    const { error } = await supabase.storage
       .from("avatars")
-      .upload(filePath, file)
-
-    if (error) {
-      console.error(error)
-      return `An error occurred: ${error.message}`
-    }
-
-    const { data: urlImageData } = supabase.storage
-      .from("avatars")
-      .getPublicUrl(filePath)
-
-    if (!urlImageData.publicUrl) return "Image not found"
-
-    const { data: profileUpData, error: profileError } = await supabase
-      .from("profiles")
-      .update({ avatar_url: urlImageData.publicUrl })
-      .eq("id", user?.id)
-
-    if (profileError) {
-      console.error(profileError)
-      return `An error occured: ${profileError.message}`
-    }
-
-    setAvatarUrl(urlImageData.publicUrl)
+      .remove([`/avatar/${filename}`])
   }
 
   const getUser = async () => {
@@ -114,8 +108,9 @@ const ProfilePage = () => {
         <div className="mx-auto">
           <Image
             src={avatarUrl}
-            className="block mx-auto mb-2 rounded-full"
+            className="block mx-auto mb-2 w-[100px] h-[100px] object-cover rounded-full"
             width={100}
+            loading="lazy"
             height={100}
             alt="profile image"
           />
@@ -124,7 +119,7 @@ const ProfilePage = () => {
               htmlFor="profile_image"
               className=" text-xs text-center cursor-pointer text-[#26a69a] hover:text-[#3fc5b8] hover:underline"
             >
-              Change image
+              Trocar foto
             </label>
             <input
               accept="image/*"
@@ -135,9 +130,16 @@ const ProfilePage = () => {
               onChange={handleAvatarChange}
             />
           </div>
-          <h1 className="text-center">Bem vindo(a), {user && user.username}</h1>
+          <div className="text-center">
+            Bem vindo(a),
+            <h1 className="inline">{user && ` ${user.username}`}</h1>
+          </div>
         </div>
-        {disabled ? <InfoProfile user={user} /> : <EditProfile nome={user.first_name} sobrenome={user.last_name} />}
+        {disabled ? (
+          <InfoProfile user={user} />
+        ) : (
+          <EditProfile nome={user.first_name} sobrenome={user.last_name} />
+        )}
         <div className="w-full flex gap-2 justify-end">
           <button
             onClick={(e) => {
@@ -146,14 +148,14 @@ const ProfilePage = () => {
             }}
             className="border-[1px] border-[#aeaeae40] px-4 py-[0.3rem] rounded-md transition-all ease-in-out hover:bg-slate-100"
           >
-            Edit
+            Editar
           </button>
           {!disabled && (
             <button
               formAction={handleSubmit}
               className="px-4 py-[0.3rem] text-white outline-none rounded-md bg-[#26a69a] transition-all ease-in-out hover:bg-[#2fbaac]"
             >
-              Submit
+              Salvar
             </button>
           )}
         </div>
