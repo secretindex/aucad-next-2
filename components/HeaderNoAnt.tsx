@@ -16,9 +16,11 @@ import { createClient } from "@/lib/supabase/ssr/ssrClient"
 import { logout } from "@/app/auth/logout/actions"
 import { useEffect, useState } from "react"
 import { AuthError, User } from "@supabase/supabase-js"
+import { usePathname } from "next/navigation"
 
 export default function NoAntHeader() {
   const supabase = createClient()
+  const pathname = usePathname()
 
   const [dbData, setDbData] = useState<{ user: User } | { user: null }>({
     user: null,
@@ -36,8 +38,9 @@ export default function NoAntHeader() {
   }
 
   useEffect(() => {
+    console.log(pathname)
     getUserFromDb()
-  }, [])
+  }, [pathname])
 
   return (
     <header className="flex border-b-[1px] border-[#cecece60] flex-row justify-between items-center gap-2 py-[0.6rem] text-sm px-4">
