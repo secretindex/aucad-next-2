@@ -37,7 +37,7 @@ const Register = () => {
     } else {
       setError("")
     }
-  }, [password, confirmPassword])
+  }, [password, confirmPassword, error])
 
   const handleRegister = async (formData: FormData) => {
     if (password.length < 6) {
