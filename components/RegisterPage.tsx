@@ -67,7 +67,7 @@ const RegisterPage: React.FC<RegisterPageProps> = ({
             </Content>
             <Row key={pathname} gutter={[16, 2]}>
               {documents &&
-                Object.keys(documents as {}).map((doc: string) => {
+                Object.keys(documents as object).map((doc: string) => {
                   return (
                     <DocumentOptions
                       key={doc}
