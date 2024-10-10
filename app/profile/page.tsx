@@ -3,16 +3,14 @@
 import EditProfile from "@/components/profile/EditProfile"
 import InfoProfile from "@/components/profile/InfoProfile"
 import { createClient } from "@/lib/supabase/ssr/ssrClient"
-import { UserMetadata } from "@supabase/supabase-js"
 import Image from "next/image"
 import { BaseSyntheticEvent, useEffect, useState } from "react"
 
 const ProfilePage = () => {
   const [disabled, setDisabled] = useState<boolean>(true)
-  const [metadata, setMetadata] = useState<UserMetadata | undefined>(undefined)
-  const [user, setUser] = useState<any | undefined>(undefined)
+  const [user, setUser] = useState<any>(null)
 
-  const [avatarUrl, setAvatarUrl] = useState<string>()
+  const [avatarUrl, setAvatarUrl] = useState<string>("")
 
   const supabase = createClient()
 
@@ -48,27 +46,34 @@ const ProfilePage = () => {
       return `An error occured: ${profileError.message}`
     }
 
-    console.log(profileUpData)
-    console.log(avatarUrl)
+    setAvatarUrl(urlImageData.publicUrl)
   }
 
   const getUser = async () => {
     const { data, error } = await supabase.auth.getUser()
-    if (!error) {
-      const { data: dbUser, error } = await supabase
+    if (!error && data) {
+      const { data: dbProfile, error: profileError } = await supabase
         .from("profiles")
         .select()
         .eq("id", data.user.id)
 
-      setUser(dbUser![0])
+      if (profileError) {
+        console.error(`Ocorreu um erro: ${profileError.message}`)
+        return
+      }
 
-      console.log(user)
-
-      setMetadata(data.user?.user_metadata)
+      if (dbProfile && dbProfile[0]) {
+        setUser(dbProfile[0])
+        setAvatarUrl(dbProfile[0].avatar_url || "")
+      }
     } else {
-      console.error("error fetching user: " + error)
+      console.error("Error fetching user: ", error)
     }
   }
+
+  useEffect(() => {
+    console.log(user, avatarUrl)
+  }, [])
 
   useEffect(() => {
     getUser()
@@ -88,6 +93,7 @@ const ProfilePage = () => {
       const { error } = await supabase
         .from("profiles")
         .update({
+          username: `${updateUser.first_name} ${updateUser.last_name}`,
           first_name: updateUser.first_name,
           last_name: updateUser.last_name,
           updated_at: new Date().toISOString(),
@@ -98,6 +104,8 @@ const ProfilePage = () => {
         console.error("Erro ao atualizar dados do perfil:", error)
       }
     }
+
+    window.location.reload()
   }
 
   return (
@@ -105,11 +113,7 @@ const ProfilePage = () => {
       <form className="w-1/2 h-1/2 flex flex-col gap-8 justify-center">
         <div className="mx-auto">
           <Image
-            src={
-              user && user!.avatar_url
-                ? user!.avatar_url
-                : "https://i.pinimg.com/236x/1a/84/02/1a8402aa701a7a262958c9b8fb4735e9.jpg"
-            }
+            src={avatarUrl}
             className="block mx-auto mb-2 rounded-full"
             width={100}
             height={100}
@@ -131,9 +135,9 @@ const ProfilePage = () => {
               onChange={handleAvatarChange}
             />
           </div>
-          <h1 className="text-center">Welcome, {user && user.full_name}</h1>
+          <h1 className="text-center">Bem vindo(a), {user && user.username}</h1>
         </div>
-        {disabled ? <InfoProfile user={user} /> : <EditProfile />}
+        {disabled ? <InfoProfile user={user} /> : <EditProfile nome={user.first_name} sobrenome={user.last_name} />}
         <div className="w-full flex gap-2 justify-end">
           <button
             onClick={(e) => {
