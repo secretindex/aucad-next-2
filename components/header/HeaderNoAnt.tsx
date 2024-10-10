@@ -12,7 +12,6 @@ import Image from "next/image"
 import Link from "next/link"
 
 import { createClient } from "@/lib/supabase/ssr/ssrClient"
-import { logout } from "@/app/auth/logout/actions"
 import { useEffect, useState } from "react"
 import { AuthError, User } from "@supabase/supabase-js"
 import { usePathname } from "next/navigation"
