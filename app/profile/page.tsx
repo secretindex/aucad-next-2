@@ -35,13 +35,13 @@ const ProfilePage = () => {
     setAvatarUrl(publicUrl)
   }
 
-  const removeImage = async () => {
-    const splitUrl = avatarUrl.split("/")
-    const filename = splitUrl[splitUrl.length - 1]
-    const { error } = await supabase.storage
-      .from("avatars")
-      .remove([`/avatar/${filename}`])
-  }
+  // const removeImage = async () => {
+  //   const splitUrl = avatarUrl.split("/")
+  //   const filename = splitUrl[splitUrl.length - 1]
+  //   const { error } = await supabase.storage
+  //     .from("avatars")
+  //     .remove([`/avatar/${filename}`])
+  // }
 
   const getUser = async () => {
     const { data, error } = await supabase.auth.getUser()

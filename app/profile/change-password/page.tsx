@@ -22,3 +22,5 @@ const ChangePassword = () => {
     </section>
   )
 }
+
+export default ChangePassword
