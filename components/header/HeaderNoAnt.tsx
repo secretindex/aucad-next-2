@@ -13,7 +13,7 @@ import Link from "next/link"
 
 import { createClient } from "@/lib/supabase/ssr/ssrClient"
 import { useEffect, useState } from "react"
-import { AuthError, User } from "@supabase/supabase-js"
+import { AuthError } from "@supabase/supabase-js"
 import { usePathname } from "next/navigation"
 import ProfileButton from "./ProfileButton"
 
@@ -21,12 +21,8 @@ export default function NoAntHeader() {
   const supabase = createClient()
   const pathname = usePathname()
 
-  const [dbData, setDbData] = useState<{ user: User } | { user: null }>({
-    user: null,
-  })
-
+  const [dbData, setDbData] = useState<any>()
   const [avatarUrl, setAvatarUrl] = useState<string>("")
-
   const [dbError, setDbError] = useState<AuthError | null>(null)
 
   async function getUserFromDb() {
@@ -44,11 +40,11 @@ export default function NoAntHeader() {
       }
 
       if (dbProfile && dbProfile[0]) {
-        console.log(dbProfile)
+        console.log(dbProfile[0])
         setAvatarUrl(dbProfile[0].avatar_url)
       }
 
-      data ? setDbData(data) : setDbData({ user: null })
+      data ? setDbData(dbProfile[0]) : setDbData(null)
       error ? setDbError(error) : setDbError(null)
 
       console.log(data, error)
@@ -105,7 +101,7 @@ export default function NoAntHeader() {
           </Link>
         </li>
       </ul>
-      <ul className="flex flex-row items-center gap-4 text-gray-700">
+      <ul key={pathname} className="flex flex-row items-center gap-4 text-gray-700">
         <li className="h-full">
           <Link
             href="/about"
@@ -115,7 +111,7 @@ export default function NoAntHeader() {
             <span className="lg:inline hidden">Sobre</span>
           </Link>
         </li>
-        {dbError !== null || dbData.user === null ? (
+        {dbError !== null || dbData === null ? (
           <li className="h-full">
             <Link
               href="/auth/login"
@@ -127,7 +123,7 @@ export default function NoAntHeader() {
           </li>
         ) : (
           <li className="h-full">
-            <ProfileButton profileImage={avatarUrl} />
+            <ProfileButton key={pathname} profileImage={avatarUrl} id={dbData?.id as string} admin={dbData?.admin} />
           </li>
         )}
       </ul>

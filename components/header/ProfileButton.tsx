@@ -4,14 +4,24 @@ import { FC, useEffect, useState } from "react"
 import Image from "next/image"
 import Link from "next/link"
 import { logout } from "@/app/auth/logout/actions"
-import { LogoutOutlined, UserOutlined } from "@ant-design/icons"
+import {
+  ControlOutlined,
+  LogoutOutlined,
+  UserOutlined,
+} from "@ant-design/icons"
+import { createClient } from "@/lib/supabase/ssr/ssrClient"
 
 interface ProfileProps {
   profileImage: string
+  id: string
+  admin: boolean
 }
 
-const ProfileButton: FC<ProfileProps> = ({ profileImage }) => {
+const ProfileButton: FC<ProfileProps> = ({ profileImage, id, admin }) => {
+  const supabase = createClient()
+
   const [isVisible, setIsVisible] = useState<boolean>(false)
+  const [isAdmin, setIsAdmin] = useState<boolean>(false)
 
   const handleDocumentClick = (e: MouseEvent) => {
     console.log((e.target as HTMLElement).closest("div")?.classList)
@@ -24,12 +34,31 @@ const ProfileButton: FC<ProfileProps> = ({ profileImage }) => {
     }
   }
 
+  const fetchUser = async () => {
+    const { data, error } = await supabase.auth.getUser()
+
+    if (error) throw new Error(error.message)
+
+    console.log("this is user from profile button: ", data.user)
+
+    return data.user
+  }
+
   useEffect(() => {
+    console.log("user id -> ", id)
+
     if (isVisible) {
       document.addEventListener("click", handleDocumentClick)
-    }
+      fetchUser()
+        .then((userDb) => {
+          console.log("fetching user")
 
-    console.log("is visible? ", isVisible)
+          console.log(userDb)
+        })
+        .catch((error) => {
+          alert(error)
+        })
+    }
 
     return () => {
       document.removeEventListener("click", handleDocumentClick)
@@ -56,7 +85,7 @@ const ProfileButton: FC<ProfileProps> = ({ profileImage }) => {
         />
       </div>
       <div
-        className={`absolute right-0 top-[160%] bg-[#fefefe] border-[#bebebe60] border-[1px] shadow-sm !w-[128px] dropd rounded-md p-2 ${
+        className={`absolute right-0 top-[160%] bg-[#fefefe] border-[#bebebe60] border-[1px] shadow-sm w-[190px] min-w-[128px] dropd rounded-md p-2 ${
           isVisible ? "appear" : "disappear"
         }`}
       >
@@ -70,10 +99,27 @@ const ProfileButton: FC<ProfileProps> = ({ profileImage }) => {
                 <UserOutlined />
               </div>
               <div className="w-full text-gray-600 text-sm text-left">
-                Profile
+                Perfil
               </div>
             </Link>
           </li>
+          {admin ? (
+            <li>
+              <Link
+                href={`/profile/admin/${id}/control-panel`}
+                className="w-full flex cursor-default items-center text-inherit transition-all ease-in-out hover:bg-[#cecece20] rounded-md justify-evenly gap-4 py-[0.4rem] px-2"
+              >
+                <div className="text-left">
+                  <ControlOutlined />
+                </div>
+                <div className="w-full text-gray-600 text-sm text-left">
+                  Painel de Controle
+                </div>
+              </Link>
+            </li>
+          ) : (
+            <></>
+          )}
           <li className="text-sm">
             <button
               onClick={handleLogout}
@@ -82,9 +128,7 @@ const ProfileButton: FC<ProfileProps> = ({ profileImage }) => {
               <div className="text-left">
                 <LogoutOutlined />
               </div>
-              <div className="w-full text-gray-600 text-sm text-left">
-                Logout
-              </div>
+              <div className="w-full text-gray-600 text-sm text-left">Sair</div>
             </button>
           </li>
         </ul>

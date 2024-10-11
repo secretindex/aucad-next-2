@@ -130,6 +130,7 @@ const ProfilePage = () => {
               onChange={handleAvatarChange}
             />
           </div>
+          <span>Admin? {user && user.admin === true ? "sim" : "não"}</span>
           <div className="text-center">
             Bem vindo(a),
             <h1 className="inline">{user && ` ${user.username}`}</h1>
