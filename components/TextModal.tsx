@@ -123,6 +123,7 @@ const TextModal: React.FC<TextModalProps> = ({ category }) => {
 
       textField?.setText(inacRejectText.trim())
     }
+
     if (category === "pensioner") {
       const pensionerText = new EndText(penDocs!.docs)
       const penRejectText = pensionerText.returnPensionerText()

@@ -8,11 +8,12 @@ import { BaseSyntheticEvent, useEffect, useState } from "react"
 import Image from "next/image"
 
 import avatarChange from "./actions"
+import axios from "axios"
+import Link from "next/link"
 
 const ProfilePage = () => {
   const [disabled, setDisabled] = useState<boolean>(true)
   const [user, setUser] = useState<any>(null)
-
   const [avatarUrl, setAvatarUrl] = useState<string>("")
 
   const supabase = createClient()
@@ -43,9 +44,19 @@ const ProfilePage = () => {
   //     .remove([`/avatar/${filename}`])
   // }
 
+  const getUserFromApi = async (id: string) => {
+    const user = await axios.get(`/api/users?id=${id}`)
+    return user
+  }
+
   const getUser = async () => {
     const { data, error } = await supabase.auth.getUser()
+
     if (!error && data) {
+      const userDB = await getUserFromApi(data.user.id)
+
+      console.log(userDB)
+
       const { data: dbProfile, error: profileError } = await supabase
         .from("profiles")
         .select()
@@ -135,6 +146,17 @@ const ProfilePage = () => {
             Bem vindo(a),
             <h1 className="inline">{user && ` ${user.username}`}</h1>
           </div>
+
+          {user && user.id ? (
+            <Link
+              href={`/profile/admin/${user.id}/control-panel`}
+              className="border-[1px] border-[#aeaeae40] px-4 py-[0.3rem] rounded-md transition-all ease-in-out hover:bg-slate-100"
+            >
+              Control Panel
+            </Link>
+          ) : (
+            <></>
+          )}
         </div>
         {disabled ? (
           <InfoProfile user={user} />
