@@ -6,14 +6,17 @@ import { ConfigProvider } from "antd"
 
 import localFont from "next/font/local"
 import "./globals.css"
-import NoAntHeader from "@/components/header/HeaderNoAnt"
+
 import CheckboxContextProvider from "@/contexts/CheckboxContext"
-import { InactivesContextProvider } from "@/contexts/Inactivescontext"
-import { PensionerContextProvider } from "@/contexts/PensionerContext"
-import { SecondCheckboxContextProvider } from "@/contexts/SecondCheckboxContext"
 import TextFieldContextProvider from "@/contexts/TextfieldContext"
 import PasteTextContextProvider from "@/contexts/PasteTextContext"
 import RegisterCounterContextProvider from "@/contexts/RegisterCountContext"
+
+import { InactivesContextProvider } from "@/contexts/Inactivescontext"
+import { PensionerContextProvider } from "@/contexts/PensionerContext"
+import { SecondCheckboxContextProvider } from "@/contexts/SecondCheckboxContext"
+
+import NoAntHeader from "@/components/header/HeaderNoAnt"
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",

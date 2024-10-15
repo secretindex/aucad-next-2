@@ -1,12 +1,53 @@
 "use client"
 
-import { BaseSyntheticEvent } from "react"
+import { BaseSyntheticEvent, ChangeEvent, useEffect, useState } from "react"
+import axios from "axios"
+
+type UF = {
+  id: number
+  uf: string
+}
 
 export default function CriarCenso() {
-  // TODO: Depois que selecionar o estado, fazer aparecer outro select com os municipios
+  const [ufs, setUfs] = useState<UF>({ id: 0, uf: "" })
+  const [estados, setEstados] = useState<any[]>([])
+  const [municipios, setMunicipios] = useState<any[]>([])
+  const [isDisabled, setIsDisabled] = useState<boolean>(true)
 
   const handleSubmit = (e: BaseSyntheticEvent) => {
     e.preventDefault()
+  }
+
+  useEffect(() => {
+    axios
+      .get(
+        "https://servicodados.ibge.gov.br/api/v1/localidades/estados?orderBy=nome"
+      )
+      .then((response) => {
+        setEstados(response.data)
+        console.log(response.data)
+      })
+  }, [])
+
+  useEffect(() => {
+    axios
+      .get(
+        `https://servicodados.ibge.gov.br/api/v1/localidades/estados/${ufs.id}/distritos`
+      )
+      .then((response) => {
+        setIsDisabled(false)
+        setMunicipios(response.data)
+        console.log(response.data)
+      })
+  }, [ufs])
+
+  const handleChange = (e: ChangeEvent<HTMLSelectElement>) => {
+    const selectedIndex = e.target.selectedIndex
+    const selectedOption = e.target.options[selectedIndex]
+    setUfs({
+      id: Number(selectedOption.getAttribute("data-id")),
+      uf: e.target.value,
+    })
   }
 
   return (
@@ -32,45 +73,54 @@ export default function CriarCenso() {
               className="border-[1px] border-[#bebebe70] focus:border-[#20202060] outline-none px-4 py-[0.3rem] rounded-md"
             />
           </div>
-          <div className="flex flex-col gap-1">
-            <label className="block text-gray-700" htmlFor="estado">
-              Estado
-            </label>
-            <select
-              name="estado"
-              className="w-full px-4 outline-none border-[1px] border-[#bdbdbd60] rounded-md py-[0.3rem]"
-              id="estado"
-            >
-              <option value="">Selecione...</option>
-              <option value="AC">Acre</option>
-              <option value="AL">Alagoas</option>
-              <option value="AP">Amapá</option>
-              <option value="AM">Amazonas</option>
-              <option value="BA">Bahia</option>
-              <option value="CE">Ceará</option>
-              <option value="DF">Distrito Federal</option>
-              <option value="ES">Espírito Santo</option>
-              <option value="GO">Goiás</option>
-              <option value="MA">Maranhão</option>
-              <option value="MT">Mato Grosso</option>
-              <option value="MS">Mato Grosso do Sul</option>
-              <option value="MG">Minas Gerais</option>
-              <option value="PA">Pará</option>
-              <option value="PB">Paraíba</option>
-              <option value="PR">Paraná</option>
-              <option value="PE">Pernambuco</option>
-              <option value="PI">Piauí</option>
-              <option value="RJ">Rio de Janeiro</option>
-              <option value="RN">Rio Grande do Norte</option>
-              <option value="RS">Rio Grande do Sul</option>
-              <option value="RO">Rondônia</option>
-              <option value="RR">Roraima</option>
-              <option value="SC">Santa Catarina</option>
-              <option value="SP">São Paulo</option>
-              <option value="SE">Sergipe</option>
-              <option value="TO">Tocantins</option>
-            </select>
+          <div className="flex gap-1">
+            <div className="flex flex-col gap-1 w-full">
+              <label className="block text-gray-700" htmlFor="estado">
+                Estado
+              </label>
+              <select
+                name="estado"
+                className="w-full px-4 outline-none border-[1px] border-[#bdbdbd60] rounded-md py-[0.3rem]"
+                id="estado"
+                onChange={handleChange}
+              >
+                <option value="">Selecione...</option>
+                <option value="WS">Estado inteiro</option>
+
+                {estados.map((state) => {
+                  return (
+                    <option
+                      key={state.id}
+                      value={state.sigla}
+                      data-id={state.id}
+                    >
+                      {state.nome}
+                    </option>
+                  )
+                })}
+              </select>
+            </div>
+            <div className="flex flex-col gap-1 w-full">
+              <label className="block text-gray-700" htmlFor="estado">
+                Municipio
+              </label>
+              <select
+                name="municipio"
+                id="municipio"
+                className="w-full px-4 outline-none border-[1px] border-[#bdbdbd60] rounded-md py-[0.3rem]"
+                disabled={isDisabled ? true : false}
+              >
+                <option value="WS">Estado inteiro</option>
+                {municipios &&
+                  municipios.map((mun) => (
+                    <option key={mun.id} value={mun.nome}>
+                      {mun.nome}
+                    </option>
+                  ))}
+              </select>
+            </div>
           </div>
+          { /* Depois adicionar option pra adicionar os usuários */ }
           <div className="w-full">
             <button
               onSubmit={handleSubmit}

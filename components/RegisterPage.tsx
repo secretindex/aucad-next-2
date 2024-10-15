@@ -65,7 +65,7 @@ const RegisterPage: React.FC<RegisterPageProps> = ({
                 {title}
               </Typography.Title>
             </Content>
-            <Row key={pathname} gutter={[16, 2]}>
+            <Row key={pathname} gutter={[16, -64]}>
               {documents &&
                 Object.keys(documents as object).map((doc: string) => {
                   return (
