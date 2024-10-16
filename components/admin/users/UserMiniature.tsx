@@ -1,13 +1,21 @@
+"use client"
+
 import { EditOutlined } from "@ant-design/icons"
 import Image from "next/image"
-import { FC } from "react"
+import { FC, useState } from "react"
+import UserOptions from "./edit/UserOptions"
 
 interface UserMiniatureProps {
   user: any
 }
 
 const UserMiniature: FC<UserMiniatureProps> = ({ user }) => {
-  console.log(user)
+  const [optionsMenuVisible, setOptionsMenuVisible] = useState<boolean>(false)
+
+  const handleEditClick = () => {
+    setOptionsMenuVisible(true)
+  }
+
   return (
     <div className="flex flex-row items-center justify-between hover:bg-gray-100 transition-all ease-in-out w-full py-2 px-4 border-[1px] border-[#bdbdbd50] rounded-md gap-2 ">
       <div className="flex gap-2 items-center">
@@ -25,10 +33,18 @@ const UserMiniature: FC<UserMiniatureProps> = ({ user }) => {
           {user.admin ? "Administrador" : "Usuário comum"}
         </span>
       </div>
-      <div>
-        <button className=" px-2 py-[0.3rem] rounded-lg border-[1px] border-[#bdbdbd50] ">
+      <div className="relative">
+        <button
+          onClick={handleEditClick}
+          className="px-2 py-[0.3rem] rounded-lg border-[1px] border-[#bdbdbd50] "
+        >
           <EditOutlined />
         </button>
+        {
+          optionsMenuVisible && (
+            <UserOptions setOptionsMenuVisible={setOptionsMenuVisible} />
+          )
+        }
       </div>
     </div>
   )

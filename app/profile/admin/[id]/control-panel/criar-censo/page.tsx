@@ -14,10 +14,6 @@ export default function CriarCenso() {
   const [municipios, setMunicipios] = useState<any[]>([])
   const [isDisabled, setIsDisabled] = useState<boolean>(true)
 
-  const handleSubmit = (e: BaseSyntheticEvent) => {
-    e.preventDefault()
-  }
-
   useEffect(() => {
     axios
       .get(
@@ -48,6 +44,23 @@ export default function CriarCenso() {
       id: Number(selectedOption.getAttribute("data-id")),
       uf: e.target.value,
     })
+  }
+
+  const handleFormSubmit = (formData: FormData) => {
+    const fullCensus = {
+      name: formData.get("nome"),
+      estado: formData.get("estado"),
+      municipio: formData.get("municipio"),
+    }
+
+    console.log("censo da amprev")
+
+    axios
+      .post("/api/census", fullCensus)
+      .then((res) => {
+        console.log(res.data)
+      })
+      .catch((e) => console.error(e))
   }
 
   return (
@@ -120,10 +133,9 @@ export default function CriarCenso() {
               </select>
             </div>
           </div>
-          { /* Depois adicionar option pra adicionar os usuários */ }
           <div className="w-full">
             <button
-              onSubmit={handleSubmit}
+              formAction={handleFormSubmit}
               className="w-full bg-[#26a69a] outline-none py-[0.3rem] transition-all ease-in-out hover:bg-[#2fbaac] text-white rounded-md "
             >
               Criar censo

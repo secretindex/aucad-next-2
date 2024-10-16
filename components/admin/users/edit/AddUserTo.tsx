@@ -16,12 +16,12 @@ const AddUserTo = () => {
           />
         </div>
         <div>
-          <label htmlFor="title">Grupo</label>
+          <label htmlFor="title">Censo</label>
           <input
             type="text"
             name="title"
             id="title"
-            placeholder="Digite o nome do grupo"
+            placeholder="Digite o nome do censo"
           />
         </div>
       </form>

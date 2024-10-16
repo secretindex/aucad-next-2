@@ -101,7 +101,10 @@ export default function NoAntHeader() {
           </Link>
         </li>
       </ul>
-      <ul key={pathname} className="flex flex-row items-center gap-4 text-gray-700">
+      <ul
+        key={pathname}
+        className="flex flex-row items-center gap-4 text-gray-700"
+      >
         <li className="h-full">
           <Link
             href="/about"
@@ -123,7 +126,7 @@ export default function NoAntHeader() {
           </li>
         ) : (
           <li className="h-full">
-            <ProfileButton key={pathname} profileImage={avatarUrl} id={dbData?.id as string} admin={dbData?.admin} />
+            <ProfileButton key={pathname} profileImage={avatarUrl} />
           </li>
         )}
       </ul>

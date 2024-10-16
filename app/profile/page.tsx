@@ -141,22 +141,10 @@ const ProfilePage = () => {
               onChange={handleAvatarChange}
             />
           </div>
-          <span>Admin? {user && user.admin === true ? "sim" : "não"}</span>
           <div className="text-center">
             Bem vindo(a),
             <h1 className="inline">{user && ` ${user.username}`}</h1>
           </div>
-
-          {user && user.id ? (
-            <Link
-              href={`/profile/admin/${user.id}/control-panel`}
-              className="border-[1px] border-[#aeaeae40] px-4 py-[0.3rem] rounded-md transition-all ease-in-out hover:bg-slate-100"
-            >
-              Control Panel
-            </Link>
-          ) : (
-            <></>
-          )}
         </div>
         {disabled ? (
           <InfoProfile user={user} />

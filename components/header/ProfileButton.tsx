@@ -10,18 +10,18 @@ import {
   UserOutlined,
 } from "@ant-design/icons"
 import { createClient } from "@/lib/supabase/ssr/ssrClient"
+import axios from "axios"
 
 interface ProfileProps {
   profileImage: string
-  id: string
-  admin: boolean
 }
 
-const ProfileButton: FC<ProfileProps> = ({ profileImage, id, admin }) => {
+const ProfileButton: FC<ProfileProps> = ({ profileImage }) => {
   const supabase = createClient()
 
   const [isVisible, setIsVisible] = useState<boolean>(false)
   const [isAdmin, setIsAdmin] = useState<boolean>(false)
+  const [idNum, setIdNum] = useState<string | undefined>(undefined)
 
   const handleDocumentClick = (e: MouseEvent) => {
     console.log((e.target as HTMLElement).closest("div")?.classList)
@@ -39,25 +39,27 @@ const ProfileButton: FC<ProfileProps> = ({ profileImage, id, admin }) => {
 
     if (error) throw new Error(error.message)
 
-    console.log("this is user from profile button: ", data.user)
+    const dados = await axios.get(`/api/users?id=${data.user.id}`)
 
-    return data.user
+    return dados.data.data[0]
   }
 
   useEffect(() => {
-    console.log("user id -> ", id)
+    fetchUser()
+      .then((userDb) => {
+        console.log("fetching user")
+
+        console.log(userDb)
+
+        setIsAdmin(userDb.admin)
+        setIdNum(userDb.id)
+      })
+      .catch((error) => {
+        alert(error)
+      })
 
     if (isVisible) {
       document.addEventListener("click", handleDocumentClick)
-      fetchUser()
-        .then((userDb) => {
-          console.log("fetching user")
-
-          console.log(userDb)
-        })
-        .catch((error) => {
-          alert(error)
-        })
     }
 
     return () => {
@@ -103,10 +105,10 @@ const ProfileButton: FC<ProfileProps> = ({ profileImage, id, admin }) => {
               </div>
             </Link>
           </li>
-          {admin ? (
+          {isAdmin ? (
             <li>
               <Link
-                href={`/profile/admin/${id}/control-panel`}
+                href={`/profile/admin/${idNum}/control-panel`}
                 className="w-full flex cursor-default items-center text-inherit transition-all ease-in-out hover:bg-[#cecece20] rounded-md justify-evenly gap-4 py-[0.4rem] px-2"
               >
                 <div className="text-left">
