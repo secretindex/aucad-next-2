@@ -1,14 +1,18 @@
 "use client"
 
-import { BaseSyntheticEvent, ChangeEvent, useEffect, useState } from "react"
+import { ChangeEvent, useEffect, useState } from "react"
+import { v4 as uuidv4 } from "uuid"
 import axios from "axios"
+import { useRouter } from "next/navigation"
 
 type UF = {
   id: number
   uf: string
 }
 
-export default function CriarCenso() {
+export default function CriarCenso({ params }: { params: { id: string } }) {
+  console.log(params.id)
+  const router = useRouter()
   const [ufs, setUfs] = useState<UF>({ id: 0, uf: "" })
   const [estados, setEstados] = useState<any[]>([])
   const [municipios, setMunicipios] = useState<any[]>([])
@@ -48,6 +52,7 @@ export default function CriarCenso() {
 
   const handleFormSubmit = (formData: FormData) => {
     const fullCensus = {
+      id: uuidv4() as string,
       name: formData.get("nome"),
       estado: formData.get("estado"),
       municipio: formData.get("municipio"),
@@ -59,13 +64,15 @@ export default function CriarCenso() {
       .post("/api/census", fullCensus)
       .then((res) => {
         console.log(res.data)
+
+        router.push(`/profile/admin/${params.id}/control-panel/editar-censo/${res.data.id}`)
       })
       .catch((e) => console.error(e))
   }
 
   return (
     <section className="h-full w-full flex flex-col items-center justify-center">
-      <div className="w-2/6 flex flex-col gap-4 border-[1px]  border-[#dbdbdb70] rounded-lg p-4 shadow-lg">
+      <div className="xl:w-2/6 sm:4/6 flex flex-col gap-4 border-[1px]  border-[#dbdbdb70] rounded-lg px-6 py-10 shadow-lg">
         <div className="text-center w-full">
           <h1 className="text-3xl">Criar novo censo</h1>
           <span className="text-sm text-gray-500">
@@ -93,12 +100,11 @@ export default function CriarCenso() {
               </label>
               <select
                 name="estado"
-                className="w-full px-4 outline-none border-[1px] border-[#bdbdbd60] rounded-md py-[0.3rem]"
+                className="w-full px-4 outline-none border-[1px] bg-transparent border-[#bdbdbd60] rounded-md py-[0.3rem]"
                 id="estado"
                 onChange={handleChange}
               >
                 <option value="">Selecione...</option>
-                <option value="WS">Estado inteiro</option>
 
                 {estados.map((state) => {
                   return (
@@ -120,7 +126,7 @@ export default function CriarCenso() {
               <select
                 name="municipio"
                 id="municipio"
-                className="w-full px-4 outline-none border-[1px] border-[#bdbdbd60] rounded-md py-[0.3rem]"
+                className="w-full px-4 outline-none bg-transparent border-[1px] border-[#bdbdbd60] rounded-md py-[0.3rem]"
                 disabled={isDisabled ? true : false}
               >
                 <option value="WS">Estado inteiro</option>
