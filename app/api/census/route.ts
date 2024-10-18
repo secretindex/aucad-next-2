@@ -5,13 +5,16 @@ async function GET(req: NextRequest) {
   const supabase = createClient()
   try {
     const id = req.nextUrl.searchParams.get("id")
-    const { data, error } = await supabase.from("census").select("*").eq("id", id);
+    const { data, error } = await supabase
+      .from("census")
+      .select("*")
+      .eq("id", id)
 
     if (error) throw new Error(error.message as string)
 
     return Response.json({ data, status: "success" })
   } catch (e) {
-    return Response.json({ message: e, status: "fail"})
+    return Response.json({ message: e, status: "fail" })
   }
 }
 
@@ -34,4 +37,11 @@ async function POST(req: Request) {
   }
 }
 
-export { GET, POST }
+async function PATCH(req: Request) {
+  const body = await req.json()
+  console.log(body)
+
+  return Response.json({ response: body, status: "success" })
+}
+
+export { GET, POST, PATCH }
