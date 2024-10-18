@@ -1,3 +1,5 @@
+// TODO: Send error message to a toast component.
+
 class ErrorHandler {
   private instance: number = 0
   private message: string

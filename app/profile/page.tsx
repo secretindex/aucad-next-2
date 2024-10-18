@@ -9,7 +9,6 @@ import Image from "next/image"
 
 import avatarChange from "./actions"
 import axios from "axios"
-import Link from "next/link"
 
 const ProfilePage = () => {
   const [disabled, setDisabled] = useState<boolean>(true)

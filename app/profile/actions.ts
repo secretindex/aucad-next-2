@@ -1,6 +1,32 @@
 import { createClient } from "@/lib/supabase/ssr/ssrClient"
+import { SupabaseClient } from "@supabase/supabase-js"
 
 const supabase = createClient()
+
+interface ImageUploadInt {
+  file: any
+  filePath: string
+  id: string
+  returnImageUrl: () => string
+}
+
+class ImageUpload implements ImageUploadInt {
+  file: any
+  filePath: string
+  id: string
+  supabase: SupabaseClient
+  constructor(file: any, filePath: string, id: string) {
+    this.file = file
+    this.filePath = filePath
+    this.id = id
+    this.supabase = createClient()
+  }
+  returnImageUrl () {
+
+
+    return ""
+  }
+}
 
 const avatarChange = async (filePath: string, file: any, id: string) => {
   const { data: _data, error } = await supabase.storage

@@ -17,7 +17,7 @@ const UserMiniature: FC<UserMiniatureProps> = ({ user }) => {
   }
 
   return (
-    <div className="flex flex-row items-center justify-between hover:bg-gray-100 transition-all ease-in-out w-full py-2 px-4 border-[1px] border-[#bdbdbd50] rounded-md gap-2 ">
+    <div className="flex flex-row items-center justify-between w-full py-2 px-4 border-[1px] border-[#bdbdbd50] rounded-md gap-2 ">
       <div className="flex gap-2 items-center">
         <Image
           src={user.avatar_url}
@@ -36,7 +36,7 @@ const UserMiniature: FC<UserMiniatureProps> = ({ user }) => {
       <div className="relative">
         <button
           onClick={handleEditClick}
-          className="px-2 py-[0.3rem] rounded-lg border-[1px] border-[#bdbdbd50] "
+          className="px-2 py-[0.3rem] hover:bg-gray-100 transition-all ease-in-out rounded-lg border-[1px] border-[#bdbdbd50] "
         >
           <EditOutlined />
         </button>

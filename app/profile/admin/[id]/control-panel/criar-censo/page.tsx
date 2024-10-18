@@ -13,6 +13,7 @@ type UF = {
 export default function CriarCenso({ params }: { params: { id: string } }) {
   console.log(params.id)
   const router = useRouter()
+
   const [ufs, setUfs] = useState<UF>({ id: 0, uf: "" })
   const [estados, setEstados] = useState<any[]>([])
   const [municipios, setMunicipios] = useState<any[]>([])
