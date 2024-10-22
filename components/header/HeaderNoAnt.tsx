@@ -11,45 +11,30 @@ import {
 import Image from "next/image"
 import Link from "next/link"
 
-import { createClient } from "@/lib/supabase/ssr/ssrClient"
 import { useEffect, useState } from "react"
 import { AuthError } from "@supabase/supabase-js"
 import { usePathname } from "next/navigation"
 import ProfileButton from "./ProfileButton"
+import axios from "axios"
 
 export default function NoAntHeader() {
-  const supabase = createClient()
   const pathname = usePathname()
 
-  const [dbData, setDbData] = useState<any>()
+  const [user, setUser] = useState<any>()
   const [avatarUrl, setAvatarUrl] = useState<string>("")
   const [dbError, setDbError] = useState<AuthError | null>(null)
 
   async function getUserFromDb() {
-    const { data, error } = await supabase.auth.getUser()
+    const endUser = await axios.get("/api/users/get-full-user")
 
-    if (!error && data) {
-      const { data: dbProfile, error: profileError } = await supabase
-        .from("profiles")
-        .select("avatar_url")
-        .eq("id", data.user.id)
+    console.log("Header full user ", endUser.data.user)
 
-      if (profileError) {
-        console.error(`Ocorreu um erro: ${profileError.message}`)
-        return
-      }
-
-      if (dbProfile && dbProfile[0]) {
-        console.log(dbProfile[0])
-        setAvatarUrl(dbProfile[0].avatar_url)
-      }
-
-      data ? setDbData(dbProfile[0]) : setDbData(null)
-      error ? setDbError(error) : setDbError(null)
-
-      console.log(data, error)
+    if (endUser.data.user) {
+      setUser(endUser.data.user)
+      setAvatarUrl(endUser.data.user.avatar_url)
     } else {
       setAvatarUrl("")
+      setDbError(endUser.data.data.message)
     }
   }
 
@@ -114,7 +99,7 @@ export default function NoAntHeader() {
             <span className="lg:inline hidden">Sobre</span>
           </Link>
         </li>
-        {dbError !== null || dbData === null ? (
+        {dbError !== null || user === null ? (
           <li className="h-full">
             <Link
               href="/auth/login"

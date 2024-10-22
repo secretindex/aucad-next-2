@@ -1,24 +1,23 @@
 "use client"
 
-import { FC, useEffect, useState } from "react"
 import Image from "next/image"
 import Link from "next/link"
-import { logout } from "@/app/auth/logout/actions"
+import axios from "axios"
+
 import {
   ControlOutlined,
   LogoutOutlined,
   UserOutlined,
 } from "@ant-design/icons"
-import { createClient } from "@/lib/supabase/ssr/ssrClient"
-import axios from "axios"
+
+import { FC, useEffect, useState } from "react"
+import { logout } from "@/app/auth/logout/actions"
 
 interface ProfileProps {
   profileImage: string
 }
 
 const ProfileButton: FC<ProfileProps> = ({ profileImage }) => {
-  const supabase = createClient()
-
   const [isVisible, setIsVisible] = useState<boolean>(false)
   const [isAdmin, setIsAdmin] = useState<boolean>(false)
   const [idNum, setIdNum] = useState<string | undefined>(undefined)
@@ -35,27 +34,18 @@ const ProfileButton: FC<ProfileProps> = ({ profileImage }) => {
   }
 
   const fetchUser = async () => {
-    const { data, error } = await supabase.auth.getUser()
-
-    if (error) throw new Error(error.message)
-
-    const dados = await axios.get(`/api/users?id=${data.user.id}`)
-
-    return dados.data.data[0]
+    const endUser = await axios.get("/api/users/get-full-user")
+    return endUser.data.user
   }
 
   useEffect(() => {
     fetchUser()
       .then((userDb) => {
-        console.log("fetching user")
-
-        console.log(userDb)
-
         setIsAdmin(userDb.admin)
         setIdNum(userDb.id)
       })
       .catch((error) => {
-        alert(error)
+        console.error(error)
       })
 
     if (isVisible) {
@@ -76,7 +66,7 @@ const ProfileButton: FC<ProfileProps> = ({ profileImage }) => {
       className="relative dropd"
       onClick={() => setIsVisible((prev) => !prev)}
     >
-      <div className="cursor-pointer">
+      <div className="cursor-pointer dropd">
         <Image
           src={profileImage && (profileImage as string)}
           width={22}
@@ -97,10 +87,10 @@ const ProfileButton: FC<ProfileProps> = ({ profileImage }) => {
               href={"/profile"}
               className="w-full flex cursor-default items-center text-inherit transition-all ease-in-out hover:bg-[#cecece20] rounded-md justify-evenly gap-4 py-[0.4rem] px-2"
             >
-              <div className="text-left">
+              <div className="text-left dropd">
                 <UserOutlined />
               </div>
-              <div className="w-full text-gray-600 text-sm text-left">
+              <div className="w-full text-gray-600 text-sm text-left dropd">
                 Perfil
               </div>
             </Link>
@@ -127,7 +117,7 @@ const ProfileButton: FC<ProfileProps> = ({ profileImage }) => {
               onClick={handleLogout}
               className="w-full flex cursor-default items-center text-inherit transition-all ease-in-out hover:bg-[#cecece20] rounded-md justify-evenly gap-4 py-[0.4rem] px-2"
             >
-              <div className="text-left">
+              <div className="text-left dropd">
                 <LogoutOutlined />
               </div>
               <div className="w-full text-gray-600 text-sm text-left">Sair</div>

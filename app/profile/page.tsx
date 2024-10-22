@@ -38,46 +38,30 @@ const ProfilePage = () => {
   // const removeImage = async () => {
   //   const splitUrl = avatarUrl.split("/")
   //   const filename = splitUrl[splitUrl.length - 1]
+
   //   const { error } = await supabase.storage
   //     .from("avatars")
   //     .remove([`/avatar/${filename}`])
   // }
 
-  const getUserFromApi = async (id: string) => {
-    const user = await axios.get(`/api/users?id=${id}`)
-    return user
-  }
-
   const getUser = async () => {
-    const { data, error } = await supabase.auth.getUser()
+    const authUser = await axios.get(`/api/users`)
 
-    if (!error && data) {
-      const userDB = await getUserFromApi(data.user.id)
+    if (authUser.data.status === "ok") {
+      const userDB = await axios.get(`/api/users?id=${authUser.data.data.user.id}`)
 
-      console.log(userDB)
-
-      const { data: dbProfile, error: profileError } = await supabase
-        .from("profiles")
-        .select()
-        .eq("id", data.user.id)
-
-      if (profileError) {
-        console.error(`Ocorreu um erro: ${profileError.message}`)
+      if (userDB.data.data.status === "error") {
+        console.log(userDB.data.data)
+        console.error("User not found in database")
         return
-      }
-
-      if (dbProfile && dbProfile[0]) {
-        setUser(dbProfile[0])
-        setAvatarUrl(dbProfile[0].avatar_url || "")
+      } else {
+        setUser(userDB.data.data)
+        setAvatarUrl(userDB.data.data.avatar_url || "")
       }
     } else {
-      console.error("Error fetching user: ", error)
+      console.error("Error fetching user: ", authUser.data.data)
     }
   }
-
-  useEffect(() => {
-    console.log(user, avatarUrl)
-  }, [])
 
   useEffect(() => {
     getUser()

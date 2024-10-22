@@ -1,15 +1,22 @@
 "use client"
 
+import avatarChange from "@/app/profile/actions"
 import LoadingSpin from "@/components/LoadingSpin"
 import { FileAddOutlined } from "@ant-design/icons"
 import axios from "axios"
 import Image from "next/image"
-import { BaseSyntheticEvent, useState } from "react"
+import { BaseSyntheticEvent, useEffect, useState } from "react"
 
 type ImageForUpload = {
-  file: any
+  file: File
   filePath: string
   userId: string
+}
+
+type ReducedUser = {
+  id: string
+  avatar_url: string
+  username: string
 }
 
 const EditarCenso = ({
@@ -22,13 +29,26 @@ const EditarCenso = ({
     undefined
   )
   const [isLoading, setIsLoading] = useState<boolean>(false)
+  const [censoName, setCensoName] = useState<string>("")
+
+  const [availableUsers, setAvailableUsers] = useState<
+    Array<ReducedUser> | undefined
+  >(undefined)
 
   const getCensoInfo = () => {
-    // TODO: Buscar informações do censo pelo censo_id
+    axios
+      .get(`/api/census?id=${params.censo_id}`)
+      .then((res) => {
+        console.log("This is censo ", res.data.census.name)
+        setCensoName(res.data.census.name)
+      })
+      .catch((e) => console.error(e))
   }
 
   const handleImageInput = (e: BaseSyntheticEvent) => {
     const file = e.target.files[0]
+
+    console.log("Before setting file image ", file)
 
     if (file) {
       const fileReader = new FileReader()
@@ -43,11 +63,18 @@ const EditarCenso = ({
       const fileName = `${Date.now()}.${fileExt}`
       const filePath = `censo/${fileName}`
 
+      console.log("after setting file image ", file)
+
+      avatarChange(filePath, file, params.id)
+
       setFileImage({ file, filePath, userId: params.id })
     }
   }
 
   const uploadImage = async () => {
+    if (typeof fileImage === "undefined") {
+      setIsLoading(false)
+    }
     if (fileImage) {
       const response = await axios.patch(`/api/census`, fileImage)
 
@@ -58,9 +85,22 @@ const EditarCenso = ({
     }
   }
 
+  const handleCensusAllowedUsers = async () => {
+    // TODO: Salvar as alterações dos usuários permitidos para o censo
+    // TODO: Redirecionar para a página de administração do censo
+    // router.push(`/profile/admin/${params.id}/control-panel/editar-censo/${params.censo_id}`)
+  }
+
+  useEffect(() => {
+    getCensoInfo()
+    // getUsersforCensus()
+  }, [])
+
   const handleSubmit = (e: BaseSyntheticEvent) => {
     e.preventDefault()
     setIsLoading(true)
+
+    console.log("before upload image ", fileImage)
 
     uploadImage()
     // TODO: Salvar as alterações no censo
@@ -117,6 +157,8 @@ const EditarCenso = ({
               type="text"
               name="name"
               id="name"
+              value={censoName}
+              onChange={(e) => setCensoName(e.target.value)}
               placeholder="Nome do censo"
               className="border-[1px] border-[#bebebe70] focus:border-[#5553] outline-none px-4 py-[0.3rem] rounded-md"
             />

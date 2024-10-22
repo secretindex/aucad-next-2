@@ -11,7 +11,6 @@ type UF = {
 }
 
 export default function CriarCenso({ params }: { params: { id: string } }) {
-  console.log(params.id)
   const router = useRouter()
 
   const [ufs, setUfs] = useState<UF>({ id: 0, uf: "" })
@@ -26,7 +25,6 @@ export default function CriarCenso({ params }: { params: { id: string } }) {
       )
       .then((response) => {
         setEstados(response.data)
-        console.log(response.data)
       })
   }, [])
 
@@ -38,7 +36,6 @@ export default function CriarCenso({ params }: { params: { id: string } }) {
       .then((response) => {
         setIsDisabled(false)
         setMunicipios(response.data)
-        console.log(response.data)
       })
   }, [ufs])
 
@@ -66,7 +63,7 @@ export default function CriarCenso({ params }: { params: { id: string } }) {
       .then((res) => {
         console.log(res.data)
 
-        router.push(`/profile/admin/${params.id}/control-panel/editar-censo/${res.data.id}`)
+        router.push(`/profile/admin/${params.id}/control-panel/editar-censo/${res.data.originalBody.id}`)
       })
       .catch((e) => console.error(e))
   }
