@@ -88,9 +88,7 @@ const ProfilePage = () => {
         })
         .eq("id", user?.id)
 
-      if (error) {
-        console.error("Erro ao atualizar dados do perfil:", error)
-      }
+      if (error) console.error("Erro ao atualizar dados do perfil:", error)
     }
 
     window.location.reload()
