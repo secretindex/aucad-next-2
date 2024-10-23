@@ -30,6 +30,7 @@ const EditarCenso = ({
   )
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [censoName, setCensoName] = useState<string>("")
+  const [imageUrl, setImageUrl] = useState<string>("")
 
   const [availableUsers, setAvailableUsers] = useState<
     Array<ReducedUser> | undefined
@@ -45,7 +46,21 @@ const EditarCenso = ({
       .catch((e) => console.error(e))
   }
 
-  const handleImageInput = (e: BaseSyntheticEvent) => {
+  const uploadImage = async (filePath: string, file: File, id: string) => {
+    const { publicUrl, profileError } = await avatarChange(
+      filePath,
+      file,
+      id
+    )
+
+    console.log("this is after url ", publicUrl, profileError)
+
+    if (profileError) throw new Error(profileError)
+
+    setImageUrl(publicUrl)
+  }
+
+  const handleImageInput = async (e: BaseSyntheticEvent) => {
     const file = e.target.files[0]
 
     console.log("Before setting file image ", file)
@@ -65,27 +80,15 @@ const EditarCenso = ({
 
       console.log("after setting file image ", file)
 
-      avatarChange(filePath, file, params.id)
-
       setFileImage({ file, filePath, userId: params.id })
     }
   }
 
-  const uploadImage = async () => {
-    if (typeof fileImage === "undefined") {
-      setIsLoading(false)
-    }
-    if (fileImage) {
-      const response = await axios.patch(`/api/census`, fileImage)
-
-      if (response) {
-        setIsLoading(false)
-        console.log(response.data.response)
-      }
-    }
-  }
-
   const handleCensusAllowedUsers = async () => {
+    const censusUser = await axios.get("/api/users/other-users")
+
+    console.log(censusUser.data)
+
     // TODO: Salvar as alterações dos usuários permitidos para o censo
     // TODO: Redirecionar para a página de administração do censo
     // router.push(`/profile/admin/${params.id}/control-panel/editar-censo/${params.censo_id}`)
@@ -93,7 +96,7 @@ const EditarCenso = ({
 
   useEffect(() => {
     getCensoInfo()
-    // getUsersforCensus()
+    handleCensusAllowedUsers()
   }, [])
 
   const handleSubmit = (e: BaseSyntheticEvent) => {
@@ -102,7 +105,10 @@ const EditarCenso = ({
 
     console.log("before upload image ", fileImage)
 
-    uploadImage()
+    uploadImage(fileImage!.filePath, fileImage!.file, fileImage!.userId)
+
+    const update = axios.patch(`/api/census?id=${params.censo_id}`, { logotipo: imageUrl, name: censoName })
+
     // TODO: Salvar as alterações no censo
     // TODO: Redirecionar para a página de administração do censo
     // router.push(`/profile/admin/${params.id}/control-panel/editar-censo/${params.censo_id}`)
