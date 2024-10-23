@@ -47,11 +47,7 @@ const EditarCenso = ({
   }
 
   const uploadImage = async (filePath: string, file: File, id: string) => {
-    const { publicUrl, profileError } = await avatarChange(
-      filePath,
-      file,
-      id
-    )
+    const { publicUrl, profileError } = await avatarChange(filePath, file, id)
 
     console.log("this is after url ", publicUrl, profileError)
 
@@ -85,9 +81,10 @@ const EditarCenso = ({
   }
 
   const handleCensusAllowedUsers = async () => {
-    const censusUser = await axios.get("/api/users/other-users")
+    const censusUser = await axios.get("/api/users/other-users?id=" + params.id)
 
     console.log(censusUser.data)
+    setAvailableUsers(censusUser.data.users)
 
     // TODO: Salvar as alterações dos usuários permitidos para o censo
     // TODO: Redirecionar para a página de administração do censo
@@ -107,10 +104,19 @@ const EditarCenso = ({
 
     uploadImage(fileImage!.filePath, fileImage!.file, fileImage!.userId)
 
-    const update = axios.patch(`/api/census?id=${params.censo_id}`, { logotipo: imageUrl, name: censoName })
+    axios.patch(`/api/census?id=${params.censo_id}`, {
+      logotipo: imageUrl,
+      name: censoName,
+    }).then(res => {
+      console.log("server patch response ", res)
+      setIsLoading(false)
+    }).catch(e => {
+      setIsLoading(false)
+      console.error(e)
+    })
 
     // TODO: Salvar as alterações no censo
-    // TODO: Redirecionar para a página de administração do censo
+    // TODO: Redirecionar para a página de censos
     // router.push(`/profile/admin/${params.id}/control-panel/editar-censo/${params.censo_id}`)
   }
 
@@ -179,6 +185,12 @@ const EditarCenso = ({
               className="w-full px-4 outline-none border-[1px] bg-transparent border-[#bdbdbd60] rounded-md py-[0.3rem]"
             >
               <option value="">Selecionar um usuário</option>
+              {(availableUsers &&
+                availableUsers.map((user) => (
+                  <option key={user.id} value={user.id}>
+                    {user.username}
+                  </option>
+                ))) || <option>Nenhum usuário encontrado</option>}
               {/* TODO: Buscar usuários para preencher o select */}
             </select>
           </div>

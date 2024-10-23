@@ -5,10 +5,15 @@ async function GET(req: NextRequest) {
   const supabase = createClient()
   try {
     const id = req.nextUrl.searchParams.get("id")
+
+    console.log(req.nextUrl.searchParams)
+
     const { data, error } = await supabase
       .from("profiles")
-      .select()
+      .select("avatar_url, username, id")
       .neq("id", id)
+
+    console.log("database error ", data, error)
 
     if (error) throw new Error(error.message)
 
