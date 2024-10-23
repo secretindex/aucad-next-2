@@ -39,11 +39,25 @@ async function POST(req: Request) {
   }
 }
 
-async function PATCH(req: Request) {
-  const body = await req.json()
-  console.log(body)
+async function PATCH(req: NextRequest) {
+  const supabase = createClient()
+  try {
+    const id = req.nextUrl.searchParams.get("id")
+    const body = await req.json()
 
-  return Response.json({ response: body, status: "success" })
+    console.log(body)
+
+    const { error } = await supabase.from("census").update(body).eq("id", id)
+
+    if (error) throw new Error(error.message)
+
+    return Response.json({
+      data: "Census updated successfully",
+      status: "success",
+    })
+  } catch (e) {
+    return Response.json({ message: e, status: "error" })
+  }
 }
 
 export { GET, POST, PATCH }
