@@ -85,10 +85,6 @@ const EditarCenso = ({
 
     console.log(censusUser.data)
     setAvailableUsers(censusUser.data.users)
-
-    // TODO: Salvar as alterações dos usuários permitidos para o censo
-    // TODO: Redirecionar para a página de administração do censo
-    // router.push(`/profile/admin/${params.id}/control-panel/editar-censo/${params.censo_id}`)
   }
 
   useEffect(() => {
@@ -99,8 +95,6 @@ const EditarCenso = ({
   const handleSubmit = (e: BaseSyntheticEvent) => {
     e.preventDefault()
     setIsLoading(true)
-
-    console.log("before upload image ", fileImage)
 
     uploadImage(fileImage!.filePath, fileImage!.file, fileImage!.userId)
 
@@ -114,10 +108,6 @@ const EditarCenso = ({
       setIsLoading(false)
       console.error(e)
     })
-
-    // TODO: Salvar as alterações no censo
-    // TODO: Redirecionar para a página de censos
-    // router.push(`/profile/admin/${params.id}/control-panel/editar-censo/${params.censo_id}`)
   }
 
   return (
