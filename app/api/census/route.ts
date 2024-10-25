@@ -47,7 +47,11 @@ async function PATCH(req: NextRequest) {
 
     console.log(body)
 
-    const { error } = await supabase.from("census").update(body).eq("id", id)
+    const { error } = await supabase
+      .from("census")
+      .update({ name: body.name, logotipo: body.logotipo })
+      .eq("id", id)
+      .select()
 
     if (error) throw new Error(error.message)
 
