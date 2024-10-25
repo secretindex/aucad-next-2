@@ -47,7 +47,7 @@ const RegisterPage: React.FC<RegisterPageProps> = ({
     return () => {
       reset()
     }
-  }, [pathname])
+  }, [pathname, reset])
 
   const restartAction = () => {
     reset()

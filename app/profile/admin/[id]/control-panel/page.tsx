@@ -67,6 +67,7 @@ const ControlPanel = async ({ params }: { params: { id: string } }) => {
         {buttons.map((button) => {
           return (
             <ControlButton
+              key={button.title}
               title={button.title}
               icon={button.icon}
               link={button.link}
