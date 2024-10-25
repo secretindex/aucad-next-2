@@ -1,7 +1,47 @@
-import { PlusOutlined, UserAddOutlined } from "@ant-design/icons"
+import { EditOutlined, PlusOutlined, UserAddOutlined } from "@ant-design/icons"
 import { createClient } from "@/lib/supabase/ssr/ssrServer"
 import { redirect } from "next/navigation"
-import Link from "next/link"
+import ControlButton from "@/components/control-panel/ControlButton"
+
+type ControlPanelButtons = { link: string; title: string; icon: JSX.Element }[]
+
+const buttons: ControlPanelButtons = [
+  {
+    link: "/profile/admin/[id]/control-panel/criar-censo",
+    title: "Criar novo censo",
+    icon: <PlusOutlined />,
+  },
+  {
+    link: "/profile/admin/[id]/control-panel/usuarios",
+    title: "Configura usuários",
+    icon: <UserAddOutlined />,
+  },
+  {
+    link: "/profile/admin/[id]/control-panel/editar-censo",
+    title: "Editar censos",
+    icon: <EditOutlined />,
+  }
+]
+
+// const backup = () => {
+//   const id = "oi"
+//   return (
+//     <>
+//       <ControlButton
+//         link={`/profile/admin/${id}/control-panel/criar-censo`}
+//         title="Configurar novo censo"
+//         icon={<PlusOutlined />}
+//         id={id}
+//       />
+//       <ControlButton
+//         link={`/profile/admin/${id}/control-panel/usuarios`}
+//         title="Configurar usuários"
+//         icon={<UserAddOutlined />}
+//         id={id}
+//       />
+//     </>
+//   )
+// }
 
 const ControlPanel = async ({ params }: { params: { id: string } }) => {
   const supabase = createClient()
@@ -24,28 +64,16 @@ const ControlPanel = async ({ params }: { params: { id: string } }) => {
         <p className="text-sm text-gray-500">O que deseja fazer agora?</p>
       </div>
       <div className="flex gap-4 w-2/6">
-        <Link
-          className="w-full"
-          href={`/profile/admin/${id}/control-panel/criar-censo`}
-        >
-          <div className="flex flex-col w-full gap-6 rounded-lg shadow-sm px-8 py-12 transition-all ease-in-out hover:bg-[#26a69a] hover:text-white border-[1px] border-[#bebebe40] ">
-            <h2 className="text-md text-center">Configurar novo censo</h2>
-            <div className="text-center text-4xl">
-              <PlusOutlined />
-            </div>
-          </div>
-        </Link>
-        <Link
-          className="w-full"
-          href={`/profile/admin/${id}/control-panel/usuarios`}
-        >
-          <div className="flex flex-col w-full gap-6 rounded-lg shadow-sm px-8 py-12 cursor-pointer transition-all ease-in-out hover:bg-[#2ab6a8] hover:text-white border-[1px] border-[#bebebe40] ">
-            <h2 className="text-md text-center">Configurar usuários</h2>
-            <div className="text-center text-4xl">
-              <UserAddOutlined />
-            </div>
-          </div>
-        </Link>
+        {buttons.map((button) => {
+          return (
+            <ControlButton
+              title={button.title}
+              icon={button.icon}
+              link={button.link}
+              id={params.id}
+            />
+          )
+        })}
       </div>
     </section>
   )
