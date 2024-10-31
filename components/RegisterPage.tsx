@@ -3,18 +3,18 @@
 import { ReloadOutlined } from "@ant-design/icons"
 
 import DocumentOptions from "./SubComponents/DocumentOptions"
+import { Category } from "./SubComponents/types/essentialTypes"
 
 import React, { useEffect, useState } from "react"
 import { FloatButton, Typography, Row, Col, Space, Layout } from "antd"
-import TextModal from "./TextModal"
 
 import { ActivesDocs, InactivesInt, PensionerDocs } from "@/utils/docsInterface"
 import { usePathname } from "next/navigation"
 
 import useAppReset from "@/utils/useAppReset"
 
-import { Category } from "./SubComponents/types/essentialTypes"
 import RegisterCounter from "./RegisterCounter"
+import TextModal from "./TextModal"
 
 interface RegisterPageProps {
   category: Category
