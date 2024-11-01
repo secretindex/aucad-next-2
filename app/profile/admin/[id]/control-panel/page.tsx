@@ -1,7 +1,8 @@
+import { ReactNode } from "react"
+import Link from "next/link"
 import { EditOutlined, PlusOutlined, UserAddOutlined } from "@ant-design/icons"
 import { createClient } from "@/lib/supabase/ssr/ssrServer"
 import { redirect } from "next/navigation"
-import ControlButton from "@/components/control-panel/ControlButton"
 
 type ControlPanelButtons = { link: string; title: string; icon: JSX.Element }[]
 
@@ -23,25 +24,28 @@ const buttons: ControlPanelButtons = [
   }
 ]
 
-// const backup = () => {
-//   const id = "oi"
-//   return (
-//     <>
-//       <ControlButton
-//         link={`/profile/admin/${id}/control-panel/criar-censo`}
-//         title="Configurar novo censo"
-//         icon={<PlusOutlined />}
-//         id={id}
-//       />
-//       <ControlButton
-//         link={`/profile/admin/${id}/control-panel/usuarios`}
-//         title="Configurar usuários"
-//         icon={<UserAddOutlined />}
-//         id={id}
-//       />
-//     </>
-//   )
-// }
+interface ControlButtonProps {
+  link: string
+  title: string
+  icon: ReactNode
+  id: string
+}
+
+const ControlButton: React.FC<ControlButtonProps> = ({
+  link,
+  title,
+  icon,
+  id,
+}) => {
+  return (
+    <Link className="w-full" href={link.replace("[id]", id)}>
+      <div className="flex flex-col w-full gap-6 rounded-lg shadow-sm px-8 py-12 transition-all ease-in-out hover:bg-[#26a69a] hover:text-white border-[1px] border-[#bebebe40] ">
+        <h3 className="text-md text-center">{title}</h3>
+        <div className="text-center text-4xl">{icon}</div>
+      </div>
+    </Link>
+  )
+}
 
 const ControlPanel = async ({ params }: { params: { id: string } }) => {
   const supabase = createClient()

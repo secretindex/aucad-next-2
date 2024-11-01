@@ -8,7 +8,7 @@ const EditarCenso = () => {
 
   const getCensos = async () => {
     const censos = await axios.get("/api/census/get-all-census")
-    console.log(censos.data)
+    setCensoList(censos.data.data)
   }
 
   useEffect(() => {
