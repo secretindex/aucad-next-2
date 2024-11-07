@@ -1,7 +1,7 @@
 "use client"
 
 import { Typography, Button } from "antd"
-import { useRouter } from "next/navigation"
+import { usePathname, useRouter } from "next/navigation"
 
 const { Title, Text } = Typography
 

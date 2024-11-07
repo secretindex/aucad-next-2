@@ -44,14 +44,16 @@ async function PATCH(req: NextRequest) {
   try {
     const id = req.nextUrl.searchParams.get("id")
     const body = await req.json()
+    
+    const { name, logotipo } = body
 
-    console.log(body)
+    console.log("this is body ", body)
+    console.log('this is id ', id)
 
     const { error } = await supabase
       .from("census")
-      .update({ name: body.name, logotipo: body.logotipo })
+      .update({ name , logotipo })
       .eq("id", id)
-      .select()
 
     if (error) throw new Error(error.message)
 

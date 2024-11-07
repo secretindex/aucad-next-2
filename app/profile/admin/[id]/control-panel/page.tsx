@@ -14,7 +14,7 @@ const buttons: ControlPanelButtons = [
   },
   {
     link: "/profile/admin/[id]/control-panel/usuarios",
-    title: "Configura usuários",
+    title: "Configurar usuários",
     icon: <UserAddOutlined />,
   },
   {
