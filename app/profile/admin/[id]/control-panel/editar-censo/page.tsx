@@ -2,7 +2,6 @@
 
 import CensoMiniature from "@/components/control-panel/censos/CensoMiniature"
 import axios from "axios"
-import PreviousMap from "postcss/lib/previous-map"
 import { useEffect, useState } from "react"
 
 const EditarCenso = () => {

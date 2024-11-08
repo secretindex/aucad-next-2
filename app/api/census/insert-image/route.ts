@@ -5,8 +5,6 @@ async function PATCH (req: Request) {
   try {
     const body = await req.json()
 
-    console.log(body)
-
     // const { data, error } = await supabase
     //  .from("profiles")
     //  .update({ logotipo: "newName" })

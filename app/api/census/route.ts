@@ -47,9 +47,6 @@ async function PATCH(req: NextRequest) {
     
     const { name, logotipo } = body
 
-    console.log("this is body ", body)
-    console.log('this is id ', id)
-
     const { error } = await supabase
       .from("census")
       .update({ name , logotipo })
