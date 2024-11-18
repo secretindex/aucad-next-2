@@ -52,6 +52,8 @@ async function PATCH(req: NextRequest) {
       .update({ name , logotipo })
       .eq("id", id)
 
+    console.log("This is from update ", name, logotipo, id, body)
+
     if (error) throw new Error(error.message)
 
     return Response.json({
