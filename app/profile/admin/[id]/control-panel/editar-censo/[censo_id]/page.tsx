@@ -1,6 +1,7 @@
 "use client"
 
 import avatarChange from "@/app/profile/actions"
+import UserSelect from "@/components/admin/census/UserListSelect"
 import LoadingSpin from "@/components/LoadingSpin"
 import { FileAddOutlined } from "@ant-design/icons"
 import axios from "axios"
@@ -13,7 +14,7 @@ type ImageForUpload = {
   userId: string
 }
 
-type ReducedUser = {
+export type ReducedUser = {
   id: string
   avatar_url: string
   username: string
@@ -42,6 +43,7 @@ const EditarCenso = ({
       .then((res) => {
         console.log("This is censo ", res.data.census.name)
         setCensoName(res.data.census.name)
+        setPreviewImage(res.data.census.logotipo)
       })
       .catch((e) => console.error(e))
   }
@@ -169,7 +171,7 @@ const EditarCenso = ({
             <label htmlFor="users" className="text-sm">
               Usuários
             </label>
-            <select
+            {/* <select
               name="users"
               id="users"
               className="w-full px-4 outline-none border-[1px] bg-transparent border-[#bdbdbd60] rounded-md py-[0.3rem]"
@@ -181,8 +183,8 @@ const EditarCenso = ({
                     {user.username}
                   </option>
                 ))) || <option>Nenhum usuário encontrado</option>}
-              {/* TODO: Buscar usuários para preencher o select */}
-            </select>
+            </select> */}
+            <UserSelect users={availableUsers} />
           </div>
           <div>
             <button
