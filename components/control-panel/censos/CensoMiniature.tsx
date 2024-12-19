@@ -1,7 +1,8 @@
-import { EditOutlined } from "@ant-design/icons"
 import Image from "next/image"
-import { FC } from "react"
+import { FC, useState } from "react"
 import { usePathname, useRouter } from "next/navigation"
+
+import { UserAddOutlined, EditOutlined, FileOutlined } from "@ant-design/icons"
 
 interface CensoMiniatureProps {
   id: string
@@ -18,12 +19,22 @@ const CensoMiniature: FC<CensoMiniatureProps> = ({
   municipio,
   cidade,
 }) => {
+  const [optionsOpen, setOptionsOpen] = useState<boolean>(false)
+
   console.log(logotipo)
   const router = useRouter()
   const pathname = usePathname()
 
   const handleEdit = () => {
     router.push(`${pathname}/${id}`)
+  }
+
+  const handleEditDocuments = () => {
+    router.push(`${pathname}/${id}/documentos`)
+  }
+
+  const handleOpenOptions = () => {
+    setOptionsOpen((prev) => !prev)
   }
 
   return (
@@ -55,13 +66,37 @@ const CensoMiniature: FC<CensoMiniatureProps> = ({
             {municipio} - {cidade}
           </footer>
         </div>
-        <div>
+        <div className="relative">
           <button
-            onClick={handleEdit}
+            onClick={handleOpenOptions}
             className="px-2 py-[0.3rem] hover:bg-gray-100 transition-all ease-in-out rounded-lg border-[1px] border-[#bdbdbd50]"
           >
             <EditOutlined />
           </button>
+          {optionsOpen && (
+            <div className="absolute left-[120%] bottom-0 p-2 rounded-md bg-[#fff] shadow-md min-w-[200px] no-close">
+              <ul className="flex flex-col no-close">
+                <li className="w-full no-close">
+                  <button
+                    onClick={handleEdit}
+                    className="flex items-center w-full gap-4 px-2 py-[0.4rem] text-sm rounded-[0.4rem] bg-transparent transition-all ease-in-out hover:bg-gray-100 no-close"
+                  >
+                    <UserAddOutlined />
+                    Adicionar usuários
+                  </button>
+                </li>
+                <li className="w-full no-close">
+                  <button
+                    onClick={handleEditDocuments}
+                    className="flex items-center w-full gap-4 px-2 py-[0.4rem] text-sm rounded-[0.4rem] bg-transparent transition-all ease-in-out hover:bg-gray-100 no-close"
+                  >
+                    <FileOutlined />
+                    Editar documentos
+                  </button>
+                </li>
+              </ul>
+            </div>
+          )}
         </div>
       </div>
     </div>

@@ -4,9 +4,10 @@ import avatarChange from "@/app/profile/actions"
 import UserSelect from "@/components/admin/census/UserListSelect"
 import LoadingSpin from "@/components/LoadingSpin"
 import { FileAddOutlined } from "@ant-design/icons"
+
+import { BaseSyntheticEvent, useEffect, useState } from "react"
 import axios from "axios"
 import Image from "next/image"
-import { BaseSyntheticEvent, useEffect, useState } from "react"
 
 type ImageForUpload = {
   file: File
@@ -20,6 +21,16 @@ export type ReducedUser = {
   username: string
 }
 
+type FullUser = {
+  id: string
+  admin: boolean
+  avatar_url: string
+  first_name: string
+  last_name: string
+  updated_at: string
+  username: string
+}
+
 const EditarCenso = ({
   params,
 }: {
@@ -29,9 +40,13 @@ const EditarCenso = ({
   const [fileImage, setFileImage] = useState<ImageForUpload | undefined>(
     undefined
   )
+
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [censoName, setCensoName] = useState<string>("")
   const [imageUrl, setImageUrl] = useState<string>("")
+  const [censusUsers, setCensusUsers] = useState<ReducedUser[]>([])
+
+  const [usersAssociated, setUsersAssociated] = useState<Array<FullUser>>([])
 
   const [availableUsers, setAvailableUsers] = useState<
     Array<ReducedUser> | undefined
@@ -41,7 +56,6 @@ const EditarCenso = ({
     axios
       .get(`/api/census?id=${params.censo_id}`)
       .then((res) => {
-        console.log("This is censo ", res.data.census.name)
         setCensoName(res.data.census.name)
         setPreviewImage(res.data.census.logotipo)
       })
@@ -51,8 +65,6 @@ const EditarCenso = ({
   const uploadImage = async (filePath: string, file: File, id: string) => {
     const { publicUrl, profileError } = await avatarChange(filePath, file, id)
 
-    console.log("this is after url ", publicUrl, profileError)
-
     if (profileError) throw new Error(profileError)
 
     setImageUrl(publicUrl)
@@ -60,8 +72,6 @@ const EditarCenso = ({
 
   const handleImageInput = async (e: BaseSyntheticEvent) => {
     const file = e.target.files[0]
-
-    console.log("Before setting file image ", file)
 
     if (file) {
       const fileReader = new FileReader()
@@ -76,40 +86,98 @@ const EditarCenso = ({
       const fileName = `${Date.now()}.${fileExt}`
       const filePath = `censo/${fileName}`
 
-      console.log("after setting file image ", file)
-
       setFileImage({ file, filePath, userId: params.id })
     }
   }
 
-  const handleCensusAllowedUsers = async () => {
-    const censusUser = await axios.get("/api/users/other-users?id=" + params.id)
+  const getUsersAssociatedWithCensus = () => axios.get("/api/users/get-users-available?cen_id=" + params.censo_id)
+  const handleCensusAllowedUsers = () => axios.get("/api/users/other-users?id=" + params.id)
 
-    console.log(censusUser.data)
-    setAvailableUsers(censusUser.data.users)
-  }
+  useEffect(() => {
+    if (usersAssociated) {
+      handleCensusAllowedUsers().then((res: any) => {
+        const dbAvailableUsers: ReducedUser[] = res!.data.users
+
+        console.log(dbAvailableUsers[0].username, usersAssociated)
+
+        const filteredUsers = [...dbAvailableUsers.filter((user1: ReducedUser) => !usersAssociated?.some((user2: FullUser) => user2.username === user1.username))]
+
+        console.log("this is filtered users -> ", filteredUsers)
+
+        setAvailableUsers(filteredUsers)
+      })
+    }
+  }, [usersAssociated])
 
   useEffect(() => {
     getCensoInfo()
-    handleCensusAllowedUsers()
+
+    getUsersAssociatedWithCensus().then((res) => {
+      console.log(res.data)
+
+      if (res.data.message) {
+        console.log(res.data.message)
+        const preUsers = [...res.data.message]
+        const users: Array<FullUser> = []
+
+        for (let i = 0; i < preUsers.length; i++) {
+          users.push(preUsers[i].profiles)
+        }
+
+        console.log(users)
+        setUsersAssociated(prev => prev = [...users])
+
+        console.log(usersAssociated)
+      }})
   }, [])
+
+  useEffect(() => {
+    console.log(censusUsers)
+  }, [censusUsers])
+
+  const createUserAndCensusObject = (userId: ReducedUser, censusId: string) => {
+    return { profile_id: userId as unknown as string, census_id: censusId }
+  }
 
   const handleSubmit = (e: BaseSyntheticEvent) => {
     e.preventDefault()
     setIsLoading(true)
 
-    uploadImage(fileImage!.filePath, fileImage!.file, fileImage!.userId)
+    const usersAndCensusList = []
 
-    axios.patch(`/api/census?id=${params.censo_id}`, {
-      logotipo: imageUrl,
-      name: censoName,
-    }).then(res => {
-      console.log("server patch response ", res)
-      setIsLoading(false)
-    }).catch(e => {
-      setIsLoading(false)
-      console.error(e)
-    })
+    console.log("this is census users ", censusUsers)
+
+    if (fileImage) {
+      uploadImage(fileImage!.filePath, fileImage!.file, fileImage!.userId)
+    }
+
+    if (censusUsers) {
+      for (let i = 0; i < censusUsers.length; i++) {
+        usersAndCensusList.push(
+          createUserAndCensusObject(censusUsers[i], params.censo_id)
+        )
+      }
+
+      console.log("users and census -> ", usersAndCensusList)
+
+      axios.post(`/api/census/insert-users`, usersAndCensusList).then((res) => {
+        console.log(res)
+      })
+    }
+
+    axios
+      .patch(`/api/census?id=${params.censo_id}`, {
+        logotipo: imageUrl,
+        name: censoName,
+      })
+      .then((res) => {
+        console.log("server patch response ", res)
+        setIsLoading(false)
+      })
+      .catch((e) => {
+        setIsLoading(false)
+        console.error(e)
+      })
   }
 
   return (
@@ -149,7 +217,7 @@ const EditarCenso = ({
             </label>
           </div>
         </div>
-        <form className="flex flex-col justify-between w-full">
+        <form className="flex flex-col gap-2 justify-between w-full">
           <div>
             <h1 className="text-xl">Editar Censo</h1>
           </div>
@@ -168,23 +236,24 @@ const EditarCenso = ({
             />
           </div>
           <div className="flex flex-col">
-            <label htmlFor="users" className="text-sm">
+            <label htmlFor="users" className="text-sm text-[#0e0e0e]">
               Usuários
             </label>
-            {/* <select
-              name="users"
-              id="users"
-              className="w-full px-4 outline-none border-[1px] bg-transparent border-[#bdbdbd60] rounded-md py-[0.3rem]"
-            >
-              <option value="">Selecionar um usuário</option>
-              {(availableUsers &&
-                availableUsers.map((user) => (
-                  <option key={user.id} value={user.id}>
-                    {user.username}
-                  </option>
-                ))) || <option>Nenhum usuário encontrado</option>}
-            </select> */}
-            <UserSelect users={availableUsers} />
+              <div className="flex flex-row gap-1 mb-[4px]">
+            { usersAssociated && usersAssociated.map((user => {
+              return (
+                <div className="group transition-all ease-in-out relative">
+                  <div className="absolute invisible group-hover:visible top-0 right-0 rounded-full bg-red-400 hover:bg-red-600 font-bold text-white text-[9px] fllex items-center text-center justify-center text-center w-[14px] h-[14px] cursor-pointer"><span>X</span></div>
+                  <div className="absolute invisible text-nowrap group-hover:visible top-[130%] z-40 left-0 rounded-md px-2 py-[2px] text-white border-[1px] bg-[#141414ac] shadow-md border-[#cecece50] w-fit">{user.username}</div>
+                    { user.avatar_url ? (<Image key={user.id} src={user.avatar_url} alt="user image" width={35} height={35} style={{ borderRadius: "100%", display: "block", width: "35px", height: "35px", objectFit: "cover" }} />) : (<div className="rounded-full block w-[35px] h-full object-cover flex flex-col bg-sky-400 text-[13px] text-white font-bold items-center justify-center">{user.username.charAt(0)}</div>) }
+                </div>
+              )
+            })) }
+              </div>
+            <UserSelect
+              users={availableUsers}
+              setCensusUsers={setCensusUsers}
+            />
           </div>
           <div>
             <button

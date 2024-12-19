@@ -2,28 +2,17 @@
 const retiredDocuments = {
   foto: {
     name: "Foto + ID",
-    required: true,
-    present: false,
   },
   id: {
     name: "Identidade",
-    required: true,
-    present: false,
-    options: undefined,
     optionList: ["valido", "+10"],
   },
   residencia: {
     name: "C. Residencia",
-    required: true,
-    present: false,
-    options: undefined,
     optionList: ["valido", "+60", "terceiros"],
   },
   estadoCivil: {
     name: "Estado civil",
-    required: true,
-    present: false,
-    options: undefined,
     optionList: [
       {
         label: "solteiro",
@@ -97,36 +86,22 @@ const retiredDocuments = {
   },
   contracheque: {
     name: "Contracheque",
-    required: true,
-    present: false,
   },
   posse: {
     name: "Termo de Posse",
-    required: true,
-    present: false,
   },
   veracidade: {
     name: "Termo de Veracidade",
-    required: true,
-    present: false,
   },
   comprovanteEstado: {
     name: "C. Estado Civil",
-    required: true,
-    present: false,
   },
   depId: {
     name: "Identidade Dependente",
-    required: false,
-    present: false,
-    options: undefined,
     optionList: ["semdep", "dep"],
   },
   declaracaoRes: {
     name: "Dec. Residência",
-    required: false,
-    present: false,
-    options: undefined,
     optionList: ["Não requerido", "Requerido"],
   },
 }

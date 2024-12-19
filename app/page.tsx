@@ -1,7 +1,7 @@
 "use client"
 
 import { Typography, Button } from "antd"
-import { usePathname, useRouter } from "next/navigation"
+import { useRouter } from "next/navigation"
 
 const { Title, Text } = Typography
 
@@ -9,7 +9,7 @@ export default function Home() {
   const navigate = useRouter()
 
   const handleNavigate = () => {
-    navigate.push("/cad/ativos")
+    navigate.push("/cad/censo")
   }
 
   return (

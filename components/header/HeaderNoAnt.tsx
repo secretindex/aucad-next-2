@@ -1,12 +1,6 @@
 "use client"
 
-import {
-  QuestionCircleOutlined,
-  ProfileOutlined,
-  UserDeleteOutlined,
-  UserOutlined,
-  LoginOutlined,
-} from "@ant-design/icons"
+import { QuestionCircleOutlined, LoginOutlined } from "@ant-design/icons"
 
 import Image from "next/image"
 import Link from "next/link"
@@ -14,6 +8,7 @@ import Link from "next/link"
 import { useEffect, useState } from "react"
 import { AuthError } from "@supabase/supabase-js"
 import { usePathname } from "next/navigation"
+
 import ProfileButton from "./ProfileButton"
 import axios from "axios"
 
@@ -26,8 +21,6 @@ export default function NoAntHeader() {
 
   async function getUserFromDb() {
     const endUser = await axios.get("/api/users/get-full-user")
-
-    console.log("Header full user ", endUser.data.user)
 
     if (endUser.data.user) {
       setUser(endUser.data.user)
@@ -57,35 +50,6 @@ export default function NoAntHeader() {
           </Link>
         </h1>
       </div>
-      <ul className="flex h-full w-4/6 flex-row transition-all justify-center ease-in-out items-center gap-4 text-gray-700">
-        <li className="h-full">
-          <Link
-            href="/cad/ativos"
-            className="text-inherit transition-all ease-in-out hover:text-[#26a69a]"
-          >
-            <UserOutlined className="mr-2" />
-            <div className="md:inline hidden">Ativos</div>
-          </Link>
-        </li>
-        <li className="h-full">
-          <Link
-            href="/cad/inativos"
-            className="text-inherit transition-all ease-in-out hover:text-[#26a69a]"
-          >
-            <UserDeleteOutlined className="mr-2" />
-            <div className="md:inline hidden">Inativos</div>
-          </Link>
-        </li>
-        <li className="h-full">
-          <Link
-            href="/cad/pensionistas"
-            className="text-inherit transition-all ease-in-out hover:text-[#26a69a]"
-          >
-            <ProfileOutlined className="mr-2" />
-            <div className="md:inline hidden">Pensionistas</div>
-          </Link>
-        </li>
-      </ul>
       <ul
         key={pathname}
         className="flex flex-row items-center gap-4 text-gray-700"
