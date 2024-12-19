@@ -13,10 +13,16 @@ export type NewDocument = {
   respostas: string[]
 }
 
-const ActivesDocumentSettings: FC = () => {
+const ActivesDocumentSettings = ({
+  params,
+}: {
+  params: { id: string; censo_id: string }
+}) => {
   const [newDocumentList, setNewDocumentList] = useState<Array<NewDocument>>([])
   const [modalVisible, setModalVisible] = useState<boolean>(false)
   const [documentListVisible, setDocumentListVisible] = useState<boolean>(false)
+
+  const { censo_id } = params
 
   // Later: fetch existing documents and display it for later editing
 
@@ -65,11 +71,7 @@ const ActivesDocumentSettings: FC = () => {
               >
                 <FileOutlined /> Lista
               </button>
-              {
-                documentListVisible && (
-                  <DocumentList />
-                )
-              }
+              {documentListVisible && <DocumentList censo_id={censo_id}/>}
             </div>
             <button
               onClick={handleSubmitDocuments}

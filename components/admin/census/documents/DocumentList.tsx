@@ -3,11 +3,7 @@ import { useEffect, useState } from "react"
 
 import type { Documento } from "@/utils/censo/models"
 
-const DocumentList = ({
-  params,
-}: {
-  params: { id: string; censo_id: string }
-}) => {
+const DocumentList = ({ censo_id }: { censo_id: string }) => {
   const [documents, setDocuments] = useState<Documento[]>([])
 
   useEffect(() => {
@@ -17,8 +13,10 @@ const DocumentList = ({
     })
   }, [])
 
-  const handleAddToCensus = (index: number) => {
-    axios.post("/api/census/documents/ativos?id=" + params.censo_id, documents[index])
+  const handleAddToCensus = async (index: number) => {
+    const response = await axios.patch("/api/census/documents/ativos?id=" + censo_id, documents[index])
+
+    console.log(response.data)
   }
 
   return (
