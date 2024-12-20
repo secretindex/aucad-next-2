@@ -1,6 +1,6 @@
 "use client"
 
-import { FC, useEffect, useState } from "react"
+import { useEffect, useState } from "react"
 import { FileAddOutlined, FileOutlined, SyncOutlined } from "@ant-design/icons"
 import DocumentModel from "@/components/admin/census/documents/DocumentModel"
 import AddNewDocument from "@/components/admin/census/documents/AddNewDocument"
@@ -8,6 +8,13 @@ import axios from "axios"
 import DocumentList from "@/components/admin/census/documents/DocumentList"
 
 export type NewDocument = {
+  nome: string
+  valores: string[]
+  respostas: string[]
+}
+
+export type NewDocumentID = {
+  id: string
   nome: string
   valores: string[]
   respostas: string[]
@@ -21,18 +28,32 @@ const ActivesDocumentSettings = ({
   const [newDocumentList, setNewDocumentList] = useState<Array<NewDocument>>([])
   const [modalVisible, setModalVisible] = useState<boolean>(false)
   const [documentListVisible, setDocumentListVisible] = useState<boolean>(false)
+  const [associatedDocuments, setAssociatedDocuments] = useState<
+    Array<NewDocument>
+  >([])
 
   const { censo_id } = params
 
-  // Later: fetch existing documents and display it for later editing
+  // TODO: fetch existing documents and display it for later editing
+
+  const fetchAssociatedDocuments = () => {
+    axios.get("/api/census/documents/ativos?id=" + censo_id).then((res) => {
+      console.log(res.data)
+      setAssociatedDocuments(res.data.data)
+    })
+  }
 
   useEffect(() => {
+    fetchAssociatedDocuments()
     console.log(newDocumentList)
   }, [newDocumentList])
 
   const handleSubmitDocuments = () => {
-    axios.post("/api/documents", newDocumentList)
-    console.log("Submitted")
+    axios.post("/api/documents", newDocumentList).then((res) => {
+      console.log(res.data)
+
+      setNewDocumentList([])
+    })
   }
 
   const handleAddDocuments = () => {
@@ -71,7 +92,7 @@ const ActivesDocumentSettings = ({
               >
                 <FileOutlined /> Lista
               </button>
-              {documentListVisible && <DocumentList censo_id={censo_id}/>}
+              {documentListVisible && <DocumentList censo_id={censo_id} />}
             </div>
             <button
               onClick={handleSubmitDocuments}
@@ -82,6 +103,18 @@ const ActivesDocumentSettings = ({
           </div>
           <div className="flex flex-col gap-0">
             <ul>
+              {associatedDocuments.length > 0 &&
+                associatedDocuments.map((doc, index) => (
+                  <li key={index}>
+                    <DocumentModel
+                      nome={doc.nome}
+                      valores={doc.valores}
+                      respostas={doc.respostas}
+                      index={index}
+                      setNewDocumentList={setNewDocumentList}
+                    />
+                  </li>
+                ))}
               {newDocumentList.length > 0 &&
                 newDocumentList.map((doc, index) => (
                   <li key={index}>
