@@ -23,7 +23,7 @@ async function GET(req: NextRequest) {
       .select("*")
       .in("id", documentIds)
 
-    // pra casa
+    // está funcionando!!!
     console.log(documents, documentsError)
 
     if (documentsError) throw documentsError

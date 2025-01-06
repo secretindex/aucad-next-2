@@ -14,6 +14,7 @@ const ProfilePage = () => {
   const [disabled, setDisabled] = useState<boolean>(true)
   const [user, setUser] = useState<any>(null)
   const [avatarUrl, setAvatarUrl] = useState<string>("")
+  const [newAvatar, setNewAvatar] = useState<string>("")
 
   const supabase = createClient()
 
@@ -32,7 +33,10 @@ const ProfilePage = () => {
 
     if (profileError) throw new Error(profileError)
 
+    setNewAvatar(publicUrl)
     setAvatarUrl(publicUrl)
+
+    console.log(newAvatar)
   }
 
   // const removeImage = async () => {
@@ -84,6 +88,7 @@ const ProfilePage = () => {
           username: `${updateUser.first_name} ${updateUser.last_name}`,
           first_name: updateUser.first_name,
           last_name: updateUser.last_name,
+          avatar_url: newAvatar,
           updated_at: new Date().toISOString(),
         })
         .eq("id", user?.id)

@@ -15,9 +15,15 @@ const avatarChange = async (filePath: string, file: any, id: string) => {
     }
   }
 
+  // até aqui, working
+
+  console.log("image report  ", _data, error)
+
   const { data: urlImageData } = supabase.storage
     .from("avatars")
     .getPublicUrl(filePath)
+
+  console.log(urlImageData.publicUrl, urlImageData)
 
   if (!urlImageData.publicUrl)
     return { publicUrl: "", profileError: "Image not found" }

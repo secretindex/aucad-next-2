@@ -34,7 +34,7 @@ async function CensoMainPage({ params }: { params: { id: string } }) {
         <div className="flex flex-row w-full justify-center">
           <ul className="flex flex-row w-3/6 gap-2">
             <li className="w-full">
-              <Link href={"/cad/censo/" + params.id + "/ativos"} className="w-full">
+              <Link href={"/cad/censo/" + params.id + "/database-ativos"} className="w-full">
                 <div className="flex flex-col no-wrap w-full gap-6 rounded-lg shadow-sm px-8 py-12 transition-all ease-in-out hover:bg-[#26a69a] hover:text-white border-[1px] border-[#bebebe40] ">
                   <div className="text-center text-4xl">
                     <UserOutlined />
