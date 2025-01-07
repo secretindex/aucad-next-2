@@ -27,6 +27,7 @@ export default function NoAntHeader() {
       setAvatarUrl(endUser.data.user.avatar_url)
     } else {
       setAvatarUrl("")
+      if (!endUser.data.data.message)
       setDbError(endUser.data.data.message)
     }
   }
