@@ -5,7 +5,7 @@ import { ReloadOutlined } from "@ant-design/icons"
 import DocumentOptions from "./SubComponents/DocumentOptions"
 import { Category } from "./SubComponents/types/essentialTypes"
 
-import React, { useEffect, useState } from "react"
+import { useEffect, useState, FC } from "react"
 import { FloatButton, Typography, Row, Col, Space, Layout } from "antd"
 
 import { ActivesDocs, InactivesInt, PensionerDocs } from "@/utils/docsInterface"
@@ -24,7 +24,7 @@ interface RegisterPageProps {
 
 const { Content } = Layout
 
-const RegisterPage: React.FC<RegisterPageProps> = ({
+const RegisterPage: FC<RegisterPageProps> = ({
   category,
   title,
   documents,

@@ -27,15 +27,12 @@ const DocumentSelect: FC<DocumentSelectProps> = ({
     console.log(value)
     setDocumentResponse({ index: index, value: value })
 
-    setResponses((prev: Array<DocumentValue>) => {
-      // const index = document.valores.indexOf(value)
+    https://agrestiprev.pe.gov.br/wp-admin/post.php?post=1907&action=elementor
 
-      if (prev.includes(documentResponse)) {
-        // verificar objeto pela key
-        return prev.filter((item) => item.index !== index)
-      } else {
-        return [...prev, documentResponse]
-      }
+    setResponses((prev) => {
+      return prev.map(doc => {
+        return doc.index === index ? {...doc, value: value} : doc
+      })
     })
   }
 
@@ -45,6 +42,7 @@ const DocumentSelect: FC<DocumentSelectProps> = ({
         style={{ width: 250 }}
         placeholder="Selecione uma opção"
         onChange={handleChange}
+        defaultValue={document.valores[1]}
         options={document.valores.map((value: string, index: number) => ({
           label: value,
           value: document.respostas[index],
