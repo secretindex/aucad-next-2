@@ -50,6 +50,7 @@ const AddNewDocument: FC<AddNewDocumentProps> = ({
             <label htmlFor="nome">Nome</label>
             <input
               className="border-[1px] border-[#bebebe30] focus:border-[#20202060] outline-none px-4 py-[0.3rem] rounded-md"
+              autocomplete="off"
               type="text"
               name="nome"
               id="nome"
@@ -64,6 +65,7 @@ const AddNewDocument: FC<AddNewDocumentProps> = ({
             </div>
             <input
               className="border-[1px] border-[#bebebe30] focus:border-[#20202060] outline-none px-4 py-[0.3rem] rounded-md"
+              autocomplete="off"
               type="text"
               name="valores"
               id="valores"
@@ -79,6 +81,7 @@ const AddNewDocument: FC<AddNewDocumentProps> = ({
             <textarea
               name="respostas"
               id="respostas"
+              autocomplete="off"
               rows={6}
               className="border-[1px] border-[#bebebe30] focus:border-[#20202060] outline-none px-4 py-[0.3rem] rounded-md"
             ></textarea>

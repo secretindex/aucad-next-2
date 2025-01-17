@@ -1,8 +1,6 @@
 "use client"
 
-// Objective: This file is responsible for the document selection component. It is used in the census page to select documents and their values.
-
-import { useState, useEffect, Dispatch, FC, SetStateAction } from "react"
+import { useState, Dispatch, FC, SetStateAction } from "react"
 import { Select } from "antd"
 
 export interface DocumentValue {
@@ -27,12 +25,10 @@ const DocumentSelect: FC<DocumentSelectProps> = ({
     console.log(value)
     setDocumentResponse({ index: index, value: value })
 
-    https://agrestiprev.pe.gov.br/wp-admin/post.php?post=1907&action=elementor
+    console.log(documentResponse)
 
     setResponses((prev) => {
-      return prev.map(doc => {
-        return doc.index === index ? {...doc, value: value} : doc
-      })
+      return prev.map(doc => doc.index === index ? {...doc, value: value} : doc)
     })
   }
 

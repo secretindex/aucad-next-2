@@ -17,6 +17,10 @@ const DatabaseAtivos = ({ params }: { params: { id: string } }) => {
     })
   }
 
+  const handleMessage = () => {
+    console.log("responses ", responses)
+  }
+
   useEffect(() => {
     getDocuments()
   }, [])
@@ -50,7 +54,7 @@ const DatabaseAtivos = ({ params }: { params: { id: string } }) => {
         </ul>
       </div>
       <div className="flex justify-center items-center mt-4">
-        <button className="px-4 py-[0.3rem] text-white outline-none rounded-md bg-[#26a69a] transition-all ease-in-out hover:bg-[#2fbaac]">
+        <button onClick={handleMessage} className="px-4 py-[0.3rem] text-white outline-none rounded-md bg-[#26a69a] transition-all ease-in-out hover:bg-[#2fbaac]">
           Analisar
         </button>
       </div>
