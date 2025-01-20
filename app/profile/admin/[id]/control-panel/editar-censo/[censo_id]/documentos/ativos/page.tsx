@@ -4,8 +4,9 @@ import { useEffect, useState } from "react"
 import { FileAddOutlined, FileOutlined, SyncOutlined } from "@ant-design/icons"
 import DocumentModel from "@/components/admin/census/documents/DocumentModel"
 import AddNewDocument from "@/components/admin/census/documents/AddNewDocument"
-import axios from "axios"
 import DocumentList from "@/components/admin/census/documents/DocumentList"
+
+import axios from "axios"
 
 export type NewDocument = {
   nome: string
@@ -38,7 +39,7 @@ const ActivesDocumentSettings = ({
 
   const fetchAssociatedDocuments = () => {
     axios.get("/api/census/documents/ativos?id=" + censo_id).then((res) => {
-      console.log(res.data)
+      console.log("Associated documents ", res.data)
       setAssociatedDocuments(res.data.data)
     })
   }
@@ -71,7 +72,7 @@ const ActivesDocumentSettings = ({
         <div className="h-32 flex w-4/6 flex-col items-center justify-center text-center">
           <h1 style={{ fontSize: "24px", fontWeight: "bold" }}>Ativos</h1>
           <span className="text-red-500 text-xs">
-            Adicione apenas os documentos obrigatórios
+            Para mais informações, consulte um especialista
           </span>
         </div>
         <div className="flex flex-col border-[1px] border-[#adadad60] rounded-md shadow-md w-4/6 h-3/5">
@@ -98,7 +99,7 @@ const ActivesDocumentSettings = ({
               onClick={handleSubmitDocuments}
               className="px-4 py-[2px] flex gap-[8px] text-white text-sm rounded-[0.2rem] bg-[#26a69a] transition-all ease-in-out hover:bg-[#6ecdc5]"
             >
-              <SyncOutlined /> Atualizar
+              <SyncOutlined /> Aplicar
             </button>
           </div>
           <div className="flex flex-col gap-0">

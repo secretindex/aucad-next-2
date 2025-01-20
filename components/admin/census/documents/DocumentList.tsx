@@ -27,7 +27,7 @@ const DocumentList = ({ censo_id }: { censo_id: string }) => {
       <ul>
         {documents &&
           documents.map((doc, index) => (
-            <li>
+            <li key={index}>
               <button
                 onClick={() => handleAddToCensus(index)}
                 className="px-4 py-[2px] flex gap-[8px] text-sm border-[1px] rounded-[0.2rem] bg-transparent transition-all ease-in-out hover:bg-gray-100"

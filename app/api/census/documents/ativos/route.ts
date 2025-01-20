@@ -55,4 +55,23 @@ async function PATCH(req: NextRequest) {
   }
 }
 
-export { GET, PATCH }
+async function DELETE (req: NextRequest){
+  const supabase = createClient()
+  try {
+    const id = req.nextUrl.searchParams.get("id")
+    const body = await req.json()
+
+    const {data, error} = await supabase.rpc("remove_from_uuid_array", {
+      census_id: id,
+      document_id: body.id
+    })
+
+    console.log("document delete status ", data, error)
+
+    return Response.json({data: data, message: "You did it!", status: "ok"})
+  } catch (error) {
+    return Response.json({ error: error, status: "fail" })
+  }
+}
+
+export { GET, PATCH, DELETE }

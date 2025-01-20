@@ -20,12 +20,15 @@ const DocumentSelect: FC<DocumentSelectProps> = ({
   index
 }) => {
   const [documentResponse, setDocumentResponse] = useState<DocumentValue>({ index: index, value: "" })
+  const [inputValue, setInputValue] = useState<string>(document.respostas[1])
 
   const handleChange = (value: string) => {
-    console.log(value)
+    console.log("this is value ", value)
     setDocumentResponse({ index: index, value: value })
 
     console.log(documentResponse)
+
+    setInputValue(value)
 
     setResponses((prev) => {
       return prev.map(doc => doc.index === index ? {...doc, value: value} : doc)
@@ -33,18 +36,16 @@ const DocumentSelect: FC<DocumentSelectProps> = ({
   }
 
   return (
-    <div className="flex flex-col gap-2 w-full">
-      <Select
-        style={{ width: 250 }}
-        placeholder="Selecione uma opção"
-        onChange={handleChange}
-        defaultValue={document.valores[1]}
-        options={document.valores.map((value: string, index: number) => ({
-          label: value,
-          value: document.respostas[index],
-        }))}
-      ></Select>
-    </div>
+    <Select
+      style={{ width: 250 }}
+      placeholder="Selecione uma opção"
+      onChange={handleChange}
+      value={inputValue}
+      options={document.valores.map((value: string, index: number) => ({
+        label: value,
+        value: document.respostas[index],
+      }))}
+    ></Select>
   )
 }
 
