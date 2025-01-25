@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import { FileAddOutlined, FileOutlined, SyncOutlined } from "@ant-design/icons"
 import DocumentModel from "@/components/admin/census/documents/DocumentModel"
 import AddNewDocument from "@/components/admin/census/documents/AddNewDocument"
