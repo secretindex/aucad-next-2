@@ -17,11 +17,12 @@ export async function login(formData: FormData) {
 
   if (error) {
     console.log(error)
-    return error
+    return error.message
   }
 
   revalidatePath("/", "layout")
   redirect("/")
+
 }
 
 export async function signup(formData: FormData) {
@@ -52,6 +53,5 @@ export async function signup(formData: FormData) {
     return error.message
   }
 
-  revalidatePath("/", "layout")
   return "Olhe sua lista de emails e confirme sua conta! (verifique se está na caixa de spam)"
 }

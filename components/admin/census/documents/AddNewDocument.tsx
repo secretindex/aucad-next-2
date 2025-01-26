@@ -23,7 +23,7 @@ const AddNewDocument: FC<AddNewDocumentProps> = ({
       ...prev,
       {
         nome: formData.get("nome")!.toString(),
-        valores: formData.get("valores")!.toString().split(", "),
+        valores: formData.get("valores")!.toString().split("\n"),
         respostas: formData.get("respostas")!.toString().split("\n"),
       },
     ])
@@ -50,41 +50,43 @@ const AddNewDocument: FC<AddNewDocumentProps> = ({
             <label htmlFor="nome">Nome</label>
             <input
               className="border-[1px] border-[#bebebe30] focus:border-[#20202060] outline-none px-4 py-[0.3rem] rounded-md"
-              autocomplete="off"
+              autoComplete="off"
               type="text"
               name="nome"
               id="nome"
             />
           </div>
-          <div className="flex flex-col gap-1">
-            <div className="flex flex-col gap-[1px]">
-              <label htmlFor="valores">Valores</label>
-              <span className="text-xs text-gray-500">
-                Separe os valores por vírgula
-              </span>
+          <div className="flex flex-row flex-nowrap justify-center gap-4">
+            <div className="flex flex-col gap-1 w-full">
+              <div className="flex flex-col gap-[1px]">
+                <label htmlFor="valores">Valores</label>
+                <span className="text-xs text-gray-500">
+                  Digite um valor por linha
+                </span>
+              </div>
+              <textarea
+                name="valores"
+                id="valores"
+                autoComplete="off"
+                rows={6}
+                className="border-[1px] border-[#bebebe30] focus:border-[#20202060] outline-none px-4 py-[0.3rem] rounded-md"
+              ></textarea>
             </div>
-            <input
-              className="border-[1px] border-[#bebebe30] focus:border-[#20202060] outline-none px-4 py-[0.3rem] rounded-md"
-              autocomplete="off"
-              type="text"
-              name="valores"
-              id="valores"
-            />
-          </div>
-          <div className="flex flex-col gap-1">
-            <div className="flex flex-col gap-[1px]">
-              <label htmlFor="respostas">Respostas</label>
-              <span className="text-xs text-gray-500">
-                Digite uma resposta por linha
-              </span>
+            <div className="flex flex-col gap-1 w-full">
+              <div className="flex flex-col gap-[1px]">
+                <label htmlFor="respostas">Respostas</label>
+                <span className="text-xs text-gray-500">
+                  Digite uma resposta por linha
+                </span>
+              </div>
+              <textarea
+                name="respostas"
+                id="respostas"
+                autoComplete="off"
+                rows={6}
+                className="border-[1px] border-[#bebebe30] focus:border-[#20202060] outline-none px-4 py-[0.3rem] rounded-md"
+              ></textarea>
             </div>
-            <textarea
-              name="respostas"
-              id="respostas"
-              autocomplete="off"
-              rows={6}
-              className="border-[1px] border-[#bebebe30] focus:border-[#20202060] outline-none px-4 py-[0.3rem] rounded-md"
-            ></textarea>
           </div>
           <div className="flex flex-col gap-1">
             <h4 className="text-sm font-bold">Instruções</h4>

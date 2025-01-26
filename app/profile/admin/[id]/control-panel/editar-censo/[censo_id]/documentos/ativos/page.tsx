@@ -1,6 +1,6 @@
 "use client"
 
-import { useCallback, useEffect, useState } from "react"
+import { useEffect, useState } from "react"
 import { FileAddOutlined, FileOutlined, SyncOutlined } from "@ant-design/icons"
 import DocumentModel from "@/components/admin/census/documents/DocumentModel"
 import AddNewDocument from "@/components/admin/census/documents/AddNewDocument"
@@ -29,13 +29,9 @@ const ActivesDocumentSettings = ({
   const [newDocumentList, setNewDocumentList] = useState<Array<NewDocument>>([])
   const [modalVisible, setModalVisible] = useState<boolean>(false)
   const [documentListVisible, setDocumentListVisible] = useState<boolean>(false)
-  const [associatedDocuments, setAssociatedDocuments] = useState<
-    Array<NewDocument>
-  >([])
+  const [associatedDocuments, setAssociatedDocuments] = useState<Array<NewDocument>>([])
 
   const { censo_id } = params
-
-  // TODO: fetch existing documents and display it for later editing
 
   const fetchAssociatedDocuments = () => {
     axios.get("/api/census/documents/ativos?id=" + censo_id).then((res) => {
@@ -49,7 +45,7 @@ const ActivesDocumentSettings = ({
     console.log(newDocumentList)
   }, [newDocumentList])
 
-  const handleSubmitDocuments = () => {
+  const handleSubmitDocuments = async () => {
     axios.post("/api/documents", newDocumentList).then((res) => {
       console.log(res.data)
 
@@ -59,7 +55,6 @@ const ActivesDocumentSettings = ({
 
   const handleAddDocuments = () => {
     setModalVisible(true)
-    console.log("adding documents to census")
   }
 
   const handleShowDocuments = () => {

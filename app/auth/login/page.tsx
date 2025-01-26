@@ -13,23 +13,32 @@ import { createClient } from "@/lib/supabase/ssr/ssrClient"
 
 import AucadIcon from "../../../public/assets/aucad round corners.png"
 import Image from "next/image"
+import LoadingSpin from "@/components/LoadingSpin"
 
 const Login = () => {
   const [email, setEmail] = useState<string>("")
   const [password, setPassword] = useState<string>("")
   const [messageApi, contextHolder] = message.useMessage()
+  const [loading, setLoading] = useState<boolean>(false)
 
   const errorMessage = (content: string) => {
     messageApi.open({
-      type: "error",
+      type: content.includes("Success") ? "success" : "error",
       content: content
     })
   }
 
-  const handleLogin = (formData: FormData) => {
-    const error = login(formData)
+  const handleLogin = async (formData: FormData) => {
+    setLoading(true)
 
-    if (error) errorMessage(error as string)
+    login(formData).then(error => {
+      setLoading(false)
+      if (!error.includes("Success")) {
+        errorMessage(error)
+      } else {
+        errorMessage("Success")
+      }
+    })
   }
 
   const router = useRouter()
@@ -120,9 +129,10 @@ const Login = () => {
             </div>
             <div>
               <button
-                className="w-full py-2 rounded-md text-gray-50 bg-[#26a69a] transition-all ease-in-out hover:bg-[#10d19a]"
+                className="w-full py-2 rounded-md text-gray-50 bg-[#26a69a] flex gap-2 justify-center items-center transition-all ease-in-out hover:bg-[#10d19a]"
                 formAction={handleLogin}
               >
+                { loading === true && (<LoadingSpin />) }
                 Login
               </button>
             </div>

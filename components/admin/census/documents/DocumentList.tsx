@@ -5,6 +5,7 @@ import type { Documento } from "@/utils/censo/models"
 
 const DocumentList = ({ censo_id }: { censo_id: string }) => {
   const [documents, setDocuments] = useState<Documento[]>([])
+  const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
     axios.get("/api/documents").then((res) => {

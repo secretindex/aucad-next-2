@@ -25,7 +25,7 @@ async function POST(req: Request) {
 
     console.log(body)
 
-    const { data, error } = await supabase.from("documentos").insert(body)
+    const { data, error } = await supabase.from("documentos").insert(body).select()
 
     console.log(error)
 

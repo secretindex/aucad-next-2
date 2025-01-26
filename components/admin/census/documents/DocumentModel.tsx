@@ -10,11 +10,13 @@ interface DocumentModelProps {
   respostas: string[]
   index: number
   setNewDocumentList: Dispatch<SetStateAction<NewDocument[]>>
+  newDocumentList: NewDocument[]
 }
 
-const DocumentModel: FC<DocumentModelProps> = ({ nome, valores, respostas, index, setNewDocumentList }) => {
+const DocumentModel: FC<DocumentModelProps> = ({ nome, valores, respostas, index, setNewDocumentList, newDocumentList }) => {
 
   const handleDeleteFromArray = () => {
+    // Verificar se new document list contem o documento que eu vou apagar. Se tiver, eu vou apagar da lista. Se não, vou desassociar do censo na base de dados
     setNewDocumentList(prev => prev.filter((_, i) => i !== index))
   }
 
