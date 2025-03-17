@@ -2,7 +2,6 @@
 
 import Image from "next/image"
 import Link from "next/link"
-import axios from "axios"
 
 import {
   ControlOutlined,
@@ -14,13 +13,13 @@ import { FC, useEffect, useState } from "react"
 import { logout } from "@/app/auth/logout/actions"
 
 interface ProfileProps {
+  id: string
+  admin: boolean
   profileImage: string
 }
 
-const ProfileButton: FC<ProfileProps> = ({ profileImage }) => {
+const ProfileButton: FC<ProfileProps> = ({ profileImage, admin, id }) => {
   const [isVisible, setIsVisible] = useState<boolean>(false)
-  const [isAdmin, setIsAdmin] = useState<boolean>(false)
-  const [idNum, setIdNum] = useState<string | undefined>(undefined)
 
   const handleDocumentClick = (e: MouseEvent) => {
     console.log((e.target as HTMLElement).closest("div")?.classList)
@@ -33,21 +32,7 @@ const ProfileButton: FC<ProfileProps> = ({ profileImage }) => {
     }
   }
 
-  const fetchUser = async () => {
-    const endUser = await axios.get("/api/users/get-full-user")
-    return endUser.data.user
-  }
-
   useEffect(() => {
-    fetchUser()
-      .then((userDb) => {
-        setIsAdmin(userDb.admin)
-        setIdNum(userDb.id)
-      })
-      .catch((error) => {
-        console.error(error)
-      })
-
     if (isVisible) {
       document.addEventListener("click", handleDocumentClick)
     }
@@ -95,10 +80,10 @@ const ProfileButton: FC<ProfileProps> = ({ profileImage }) => {
               </div>
             </Link>
           </li>
-          {isAdmin ? (
+          {admin ? (
             <li>
               <Link
-                href={`/profile/admin/${idNum}/control-panel`}
+                href={`/profile/admin/${id}/control-panel`}
                 className="w-full flex cursor-default items-center text-inherit transition-all ease-in-out hover:bg-[#cecece20] rounded-md justify-evenly gap-4 py-[0.4rem] px-2"
               >
                 <div className="text-left">

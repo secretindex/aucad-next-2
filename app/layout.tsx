@@ -3,6 +3,7 @@ import type { Metadata } from "next"
 import { AntdRegistry } from "@ant-design/nextjs-registry"
 
 import { ConfigProvider } from "antd"
+import QueryProvider from "@/components/QueryProvider"
 
 import localFont from "next/font/local"
 import "./globals.css"
@@ -23,6 +24,7 @@ const geistSans = localFont({
   variable: "--font-geist-sans",
   weight: "100 900",
 })
+
 const geistMono = localFont({
   src: "./fonts/GeistMonoVF.woff",
   variable: "--font-geist-mono",
@@ -44,36 +46,38 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} h-screen antialiased`}
       >
-        <RegisterCounterContextProvider>
-          <CheckboxContextProvider>
-            <InactivesContextProvider>
-              <PensionerContextProvider>
-                <SecondCheckboxContextProvider>
-                  <TextFieldContextProvider>
-                    <PasteTextContextProvider>
-                      <AntdRegistry>
-                        <ConfigProvider
-                          componentSize="large"
-                          theme={{
-                            token: {
-                              colorPrimary: "#26a69a",
-                              fontFamily: "sans-serif",
-                            },
-                          }}
-                        >
-                          <main className="h-full flex flex-col">
-                            <NoAntHeader />
-                            {children}
-                          </main>
-                        </ConfigProvider>
-                      </AntdRegistry>
-                    </PasteTextContextProvider>
-                  </TextFieldContextProvider>
-                </SecondCheckboxContextProvider>
-              </PensionerContextProvider>
-            </InactivesContextProvider>
-          </CheckboxContextProvider>
-        </RegisterCounterContextProvider>
+        <QueryProvider>
+          <RegisterCounterContextProvider>
+            <CheckboxContextProvider>
+              <InactivesContextProvider>
+                <PensionerContextProvider>
+                  <SecondCheckboxContextProvider>
+                    <TextFieldContextProvider>
+                      <PasteTextContextProvider>
+                        <AntdRegistry>
+                          <ConfigProvider
+                            componentSize="large"
+                            theme={{
+                              token: {
+                                colorPrimary: "#26a69a",
+                                fontFamily: "sans-serif",
+                              },
+                            }}
+                          >
+                            <main className="h-full flex flex-col">
+                              <NoAntHeader />
+                              {children}
+                            </main>
+                          </ConfigProvider>
+                        </AntdRegistry>
+                      </PasteTextContextProvider>
+                    </TextFieldContextProvider>
+                  </SecondCheckboxContextProvider>
+                </PensionerContextProvider>
+              </InactivesContextProvider>
+            </CheckboxContextProvider>
+          </RegisterCounterContextProvider>
+        </QueryProvider>
       </body>
     </html>
   )

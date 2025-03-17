@@ -4,37 +4,32 @@ import { QuestionCircleOutlined, LoginOutlined } from "@ant-design/icons"
 
 import Image from "next/image"
 import Link from "next/link"
+import { useQuery } from "@tanstack/react-query"
 
-import { useEffect, useState } from "react"
-import { AuthError } from "@supabase/supabase-js"
 import { usePathname } from "next/navigation"
 
 import ProfileButton from "./ProfileButton"
 import axios from "axios"
 
+const fetchUserFromDB = async () => {
+  const endUser = await axios.get("/api/users/get-full-user")
+  return endUser
+}
+
 export default function NoAntHeader() {
   const pathname = usePathname()
+  const { data: userFromDb, isLoading } = useQuery({
+    queryKey: ["user"],
+    queryFn: () => fetchUserFromDB(),
+  })
 
-  const [user, setUser] = useState<any>()
-  const [avatarUrl, setAvatarUrl] = useState<string>("")
-  const [dbError, setDbError] = useState<AuthError | null>(null)
+  console.log(userFromDb?.data.user)
 
-  async function getUserFromDb() {
-    const endUser = await axios.get("/api/users/get-full-user")
-
-    if (endUser.data.user) {
-      setUser(endUser.data.user)
-      setAvatarUrl(endUser.data.user.avatar_url)
-    } else {
-      setAvatarUrl("")
-      if (!endUser.data.data.message)
-      setDbError(endUser.data.data.message)
-    }
+  if (isLoading) {
+    return (
+      <div>Loading...</div>
+    )
   }
-
-  useEffect(() => {
-    getUserFromDb()
-  }, [pathname])
 
   return (
     <header className="flex border-b-[1px] border-[#cecece60] flex-row justify-between items-center gap-2 py-[0.6rem] text-sm px-4">
@@ -64,7 +59,7 @@ export default function NoAntHeader() {
             <span className="lg:inline hidden">Sobre</span>
           </Link>
         </li>
-        {dbError !== null || user === null ? (
+        { !userFromDb?.data.user ? (
           <li className="h-full">
             <Link
               href="/auth/login"
@@ -76,7 +71,7 @@ export default function NoAntHeader() {
           </li>
         ) : (
           <li className="h-full">
-            <ProfileButton key={pathname} profileImage={avatarUrl} />
+            <ProfileButton key={pathname} id={userFromDb?.data.user.id} admin={userFromDb?.data.user.admin} profileImage={userFromDb?.data.user.avatar_url} />
           </li>
         )}
       </ul>
