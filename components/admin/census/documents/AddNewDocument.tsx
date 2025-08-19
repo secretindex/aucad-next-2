@@ -91,7 +91,9 @@ const AddNewDocument: FC<AddNewDocumentProps> = ({
           <div className="flex flex-col gap-1">
             <h4 className="text-sm font-bold">Instruções</h4>
             <span className="text-xs text-gray-500">
-              Os campos "valores" e "respostas" precisam estar em ordem paralela.<br />Ex: O valor "id + 10 anos" estando na terceira opção no campo 'valores' precisa que sua resposta esteja como terceira opção no campo "respostas".
+              {`Os campos "valores" e "respostas" precisam estar em ordem paralela.`}
+              <br />
+              {`Ex: O valor "id + 10 anos" estando na terceira opção no campo 'valores' precisa que sua resposta esteja como terceira opção no campo "respostas".`}
             </span>
           </div>
           <div className="flex flex-col gap-1">
