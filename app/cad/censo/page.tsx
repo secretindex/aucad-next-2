@@ -38,7 +38,7 @@ async function SelectCensoPage() {
             </h2>
           </div>
           {data?.map(({ census }: { census: any }) => (
-            <Link href={`/cad/censo/${census.id}`}>
+            <Link key={census.id} href={`/cad/censo/${census.id}`}>
               <div
                 key={census.id}
                 className="rounded-md p-4 border-[1px] border-[#50505030] bg-white shadow-md flex flex-col cursor-pointer pointer hover:bg-gray-50"
