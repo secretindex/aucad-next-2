@@ -243,9 +243,9 @@ const EditarCenso = ({
             { usersAssociated && usersAssociated.map((user => {
               return (
                 <div className="group transition-all ease-in-out relative" key={user.id} >
-                  <div className="absolute invisible group-hover:visible top-0 right-0 rounded-full bg-red-400 hover:bg-red-600 font-bold text-white text-[9px] fllex items-center text-center justify-center text-center w-[14px] h-[14px] cursor-pointer"><span>X</span></div>
+                  <div className="absolute invisible group-hover:visible top-0 right-0 rounded-full bg-red-400 hover:bg-red-600 font-bold text-white text-[9px] fllex items-center text-center justify-center w-[14px] h-[14px] cursor-pointer"><span>X</span></div>
                   <div className="absolute invisible text-nowrap group-hover:visible top-[130%] z-40 left-0 rounded-md px-2 py-[2px] text-white border-[1px] bg-[#141414ac] shadow-md border-[#cecece50] w-fit">{user.username}</div>
-                    { user.avatar_url ? (<Image key={user.id} src={user.avatar_url} alt="user image" width={35} height={35} style={{ borderRadius: "100%", display: "block", width: "35px", height: "35px", objectFit: "cover" }} />) : (<div className="rounded-full block w-[35px] h-full object-cover flex flex-col bg-sky-400 text-[13px] text-white font-bold items-center justify-center">{user.username.charAt(0)}</div>) }
+                    { user.avatar_url ? (<Image key={user.id} src={user.avatar_url} alt="user image" width={35} height={35} style={{ borderRadius: "100%", display: "block", width: "35px", height: "35px", objectFit: "cover" }} />) : (<div className="rounded-full w-[35px] h-full object-cover flex flex-col bg-sky-400 text-[13px] text-white font-bold items-center justify-center">{user.username.charAt(0)}</div>) }
                 </div>
               )
             })) }
