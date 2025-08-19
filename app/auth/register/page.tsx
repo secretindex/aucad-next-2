@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, BaseSyntheticEvent, useEffect } from "react"
+import React, { useState, BaseSyntheticEvent, useEffect } from "react"
 import { message } from "antd"
 import Link from "next/link"
 
@@ -16,6 +16,7 @@ const Register = () => {
   const [messageApi, contextHolder] = message.useMessage()
 
   const [error, setError] = useState<string>("")
+  const [success, setSuccess] = useState<string>("")
 
   const handleChange = (field: string, val: string) => {
     if (field === "email") {
@@ -30,13 +31,14 @@ const Register = () => {
   const errorMessage = (content: string) => {
     messageApi.open({
       type: "error",
-      content: content
+      content: content,
     })
   }
+
   const successMessage = (content: string) => {
     messageApi.open({
       type: "success",
-      content: content
+      content: content,
     })
   }
 
@@ -50,23 +52,41 @@ const Register = () => {
     }
   }, [password, confirmPassword, error])
 
-  const handleRegister = async (formData: FormData) => {
-    if (password.length < 6) {
-      setError("Senha menor que 6 dígitos")
+  useEffect(() => {
+    if (error !== "" && !error.includes("correspondem")) {
+      errorMessage(error)
     }
+  }, [error])
 
-    const msg = await signup(formData)
+  useEffect(() => {
+    if (success !== "") {
+      successMessage(success)
+    }
+  }, [success])
 
-    console.log("this is message ", msg)
+  const handleRegister = async (e: React.FormEvent) => {
+    e.preventDefault()
+    const formData = new FormData(e.currentTarget as HTMLFormElement)
 
-    if (!msg.includes("confirme")) errorMessage(msg)
+    if (password.length < 6) {
+      errorMessage("Senha menor que 6 dígitos")
+      return
+    } else if (
+      !password ||
+      !email ||
+      !confirmPassword ||
+      !firstName ||
+      !lastName
+    ) {
+      setError("Preencha todos os campos")
+      return
+    } else {
+      const msg = await signup(formData)
 
-    successMessage(msg)
-  }
+      setSuccess(msg)
 
-  const setNewMessage = () => {
-    const messg: string = "babahe"
-    successMessage(messg)
+      console.log("this is message ", msg)
+    }
   }
 
   return (
@@ -84,7 +104,10 @@ const Register = () => {
               mais poderoso do Brasil
             </p>
           </div>
-          <form className="flex flex-col gap-[0.6rem] w-full px-4">
+          <form
+            onSubmit={handleRegister}
+            className="flex flex-col gap-[0.6rem] w-full px-4"
+          >
             <div className="w-full flex flex-row gap-2">
               <div className="flex flex-col w-full">
                 <label className="text-gray-500">Nome</label>
@@ -93,6 +116,7 @@ const Register = () => {
                   name="first_name"
                   id="first_name"
                   value={firstName}
+                  autoComplete="false"
                   onChange={(e: BaseSyntheticEvent) =>
                     setFirstName(e.target.value)
                   }
@@ -106,6 +130,7 @@ const Register = () => {
                   type="text"
                   name="last_name"
                   id="last_name"
+                  autoComplete="false"
                   value={lastName}
                   onChange={(e: BaseSyntheticEvent) =>
                     setLastName(e.target.value)
@@ -137,8 +162,9 @@ const Register = () => {
                 name="password"
                 id="password"
                 autoComplete="false"
-                className={`border-[1.5px] border-[#bebebe50] outline-none transition-all duration-150 ease-in-out w-full ${error ? "border-[#de185a]" : ""
-                  } px-4 py-[0.4rem] rounded-md`}
+                className={`border-[1.5px] border-[#bebebe50] outline-none transition-all duration-150 ease-in-out w-full ${
+                  error ? "border-[#de185a]" : ""
+                } px-4 py-[0.4rem] rounded-md`}
                 value={password}
                 required
                 onChange={(e: BaseSyntheticEvent) =>
@@ -154,8 +180,9 @@ const Register = () => {
                 id="confirm-password"
                 value={confirmPassword}
                 autoComplete="false"
-                className={`border-[1.5px] border-[#bebebe50] outline-none transition-all duration-150 ease-in-out w-full ${error ? "border-[#de185a]" : ""
-                  } px-4 py-[0.4rem] rounded-md`}
+                className={`border-[1.5px] border-[#bebebe50] outline-none transition-all duration-150 ease-in-out w-full ${
+                  error ? "border-[#de185a]" : ""
+                } px-4 py-[0.4rem] rounded-md`}
                 required
                 onChange={(e: BaseSyntheticEvent) =>
                   handleChange("confirmPass", e.target.value)
@@ -170,18 +197,18 @@ const Register = () => {
             <div className="my-2">
               <button
                 className="w-full px-4 py-[0.4rem] flex items-center justify-center gap-2 text-gray-50 rounded-md bg-[#26a69a] transition-all ease-in-out hover:bg-[#2bbe94]"
-                formAction={handleRegister}
+                type="submit"
               >
                 Criar conta
               </button>
             </div>
-            <button onClick={setNewMessage}>
-              Set message
-            </button>
             <hr />
             <div className="text-center text-sm">
               <span className="text-gray-600">Já tem uma conta?</span>{" "}
-              <Link className="text-[#26a69a] hover:underline" href="/auth/login">
+              <Link
+                className="text-[#26a69a] hover:underline"
+                href="/auth/login"
+              >
                 Entre aqui
               </Link>
             </div>
