@@ -18,7 +18,7 @@ async function CensoMainPage({ params }: { params: { id: string } }) {
     .select()
     .eq("id", params.id)
 
-  const censo = data[0]
+  const censo = data![0]
 
   console.log(data, error)
 
