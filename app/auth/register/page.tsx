@@ -4,7 +4,7 @@ import React, { useState, BaseSyntheticEvent, useEffect } from "react"
 import { message } from "antd"
 import Link from "next/link"
 
-import { signup } from "./actions"
+import axios from "axios"
 
 const Register = () => {
   const [email, setEmail] = useState<string>("")
@@ -64,9 +64,16 @@ const Register = () => {
     }
   }, [success])
 
-  const handleRegister = async (e: React.FormEvent) => {
+  const clearFields = () => {
+    setEmail("")
+    setPassword("")
+    setConfirmPassword("")
+    setLastName("")
+    setFirstName("")
+  }
+
+  const handleRegister = async (e: BaseSyntheticEvent) => {
     e.preventDefault()
-    const formData = new FormData(e.currentTarget as HTMLFormElement)
 
     if (password.length < 6) {
       errorMessage("Senha menor que 6 dígitos")
@@ -81,11 +88,18 @@ const Register = () => {
       setError("Preencha todos os campos")
       return
     } else {
-      const msg = await signup(formData)
+      const res = await axios.post("/api/register", {
+        first_name: firstName,
+        last_name: lastName,
+        email: email,
+        password: password,
+      })
 
-      setSuccess(msg)
+      console.log(res.data.message)
 
-      console.log("this is message ", msg)
+      successMessage(res.data.message)
+
+      clearFields()
     }
   }
 
@@ -104,10 +118,7 @@ const Register = () => {
               mais poderoso do Brasil
             </p>
           </div>
-          <form
-            onSubmit={handleRegister}
-            className="flex flex-col gap-[0.6rem] w-full px-4"
-          >
+          <form className="flex flex-col gap-[0.6rem] w-full px-4">
             <div className="w-full flex flex-row gap-2">
               <div className="flex flex-col w-full">
                 <label className="text-gray-500">Nome</label>
@@ -197,14 +208,14 @@ const Register = () => {
             <div className="my-2">
               <button
                 className="w-full px-4 py-[0.4rem] flex items-center justify-center gap-2 text-gray-50 rounded-md bg-[#26a69a] transition-all ease-in-out hover:bg-[#2bbe94]"
-                type="submit"
+                onClick={handleRegister}
               >
                 Criar conta
               </button>
             </div>
             <hr />
             <div className="text-center text-sm">
-              <span className="text-gray-600">Já tem uma conta?</span>{" "}
+              <span className="text-gray-600">Já tem uma conta?</span>
               <Link
                 className="text-[#26a69a] hover:underline"
                 href="/auth/login"
