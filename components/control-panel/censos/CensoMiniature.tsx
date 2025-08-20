@@ -2,7 +2,12 @@ import Image from "next/image"
 import { FC, useState } from "react"
 import { usePathname, useRouter } from "next/navigation"
 
-import { UserAddOutlined, EditOutlined, FileOutlined } from "@ant-design/icons"
+import {
+  UserAddOutlined,
+  EditOutlined,
+  FileOutlined,
+  DeleteOutlined,
+} from "@ant-design/icons"
 
 interface CensoMiniatureProps {
   id: string
@@ -31,6 +36,10 @@ const CensoMiniature: FC<CensoMiniatureProps> = ({
 
   const handleEditDocuments = () => {
     router.push(`${pathname}/${id}/documentos`)
+  }
+
+  const handleDelete = () => {
+    console.log("oi")
   }
 
   const handleOpenOptions = () => {
@@ -92,6 +101,15 @@ const CensoMiniature: FC<CensoMiniatureProps> = ({
                   >
                     <FileOutlined />
                     Editar documentos
+                  </button>
+                </li>
+                <li>
+                  <button
+                    onClick={handleDelete}
+                    className="flex items-center text-red-600 w-full gap-4 px-2 py-[0.4rem] text-sm rounded-[0.4rem] bg-transparent transition-all ease-in-out hover:bg-red-100 no-close"
+                  >
+                    <DeleteOutlined />
+                    Apagar
                   </button>
                 </li>
               </ul>

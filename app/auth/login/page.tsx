@@ -83,7 +83,7 @@ const Login = () => {
               className="w-full py-2 flex items-center justify-center gap-2 transition-all ease-in-out hover:bg-gray-50 px-4 roudned-md border-[1px] border-[#cecece40] mx-4"
               onClick={handleOauthLogin}
             >
-              <span className="text-gray-500">You can sign in using google</span>{" "}
+              <span className="text-gray-500">You can sign in using Google</span>{" "}
               <GoogleOutlined />
             </button>
           </div>

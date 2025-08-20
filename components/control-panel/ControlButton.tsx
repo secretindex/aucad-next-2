@@ -15,8 +15,8 @@ const ControlButton: React.FC<ControlButtonProps> = ({
   id,
 }) => {
   return (
-    <Link className="w-full" href={link.replace("[id]", id)}>
-      <div className="flex flex-col no-wrap w-full gap-6 rounded-lg shadow-sm px-8 py-12 transition-all ease-in-out hover:bg-[#26a69a] hover:text-white border-[1px] border-[#bebebe40] ">
+    <Link className="w-1/6" href={link.replace("[id]", id)}>
+      <div className="flex flex-col no-wrap w-full gap-6 rounded-lg shadow-sm px-8 py-12 transition-all ease-in-out hover:bg-[#26a69a] hover:text-white border-[1px] border-[#0003] ">
         <h3 className="text-md text-center text-nowrap">{title}</h3>
         <div className="text-center text-4xl">{icon}</div>
       </div>

@@ -44,7 +44,7 @@ const ControlPanel = async ({ params }: { params: { id: string } }) => {
         </h1>
         <p className="text-sm text-gray-500">O que deseja fazer agora?</p>
       </div>
-      <div className="flex gap-4 w-2/6">
+      <div className="flex gap-4 justify-center items-center w-full">
         {buttons.map((button) => {
           return (
             <ControlButton

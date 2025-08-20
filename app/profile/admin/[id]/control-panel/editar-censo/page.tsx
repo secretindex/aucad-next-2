@@ -25,7 +25,7 @@ const EditarCenso = () => {
           <h2 className="text-2xl font-semibold">Editar Censo</h2>
         </div>
         <div className="">
-          <ul className="flex flex-row gap-4">
+          <ul className="flex flex-row md:flex-wrap xl:flex-nowrap gap-4">
             {censoList.map((censo) => (
               <>
                 <CensoMiniature

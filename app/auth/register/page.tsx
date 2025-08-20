@@ -214,7 +214,7 @@ const Register = () => {
               </button>
             </div>
             <hr />
-            <div className="text-center text-sm">
+            <div className="flex gap-1 justify-center text-center text-sm">
               <span className="text-gray-600">Já tem uma conta?</span>
               <Link
                 className="text-[#26a69a] hover:underline"

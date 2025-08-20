@@ -28,6 +28,7 @@ const ActivesDocumentSettings = ({
 }) => {
   const [newDocumentList, setNewDocumentList] = useState<Array<NewDocument>>([])
   const [modalVisible, setModalVisible] = useState<boolean>(false)
+
   const [documentListVisible, setDocumentListVisible] = useState<boolean>(false)
   const [associatedDocuments, setAssociatedDocuments] = useState<
     Array<NewDocument>
