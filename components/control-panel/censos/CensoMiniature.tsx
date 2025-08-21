@@ -15,6 +15,7 @@ interface CensoMiniatureProps {
   logotipo: string
   municipio: string
   cidade: string
+  deleteFn: (id: string) => void
 }
 
 const CensoMiniature: FC<CensoMiniatureProps> = ({
@@ -23,6 +24,7 @@ const CensoMiniature: FC<CensoMiniatureProps> = ({
   logotipo,
   municipio,
   cidade,
+  deleteFn,
 }) => {
   const [optionsOpen, setOptionsOpen] = useState<boolean>(false)
 
@@ -49,31 +51,33 @@ const CensoMiniature: FC<CensoMiniatureProps> = ({
   return (
     <div
       key={id}
-      className="flex flex-row gap-4 border-[1px] w-full border-[#50505045] p-2 rounded-md"
+      className="flex flex-row gap-4 justify-between border-[1px] w-full border-[#50505045] p-2 rounded-md"
     >
-      <div className="flex gap-4 items-center justify-between">
-        {logotipo !== "" ? (
-          <div className="h-full w-[50px] rounded-md">
-            <Image
-              className="block w-full h-full rounded-md object-cover"
-              src={logotipo}
-              alt={name}
-              width={60}
-              height={60}
-            />
+      <div className="flex gap-4 items-center justify-between w-full">
+        <div className="flex gap-4 items-center h-full">
+          {logotipo !== "" ? (
+            <div className="h-full w-[50px] rounded-md">
+              <Image
+                className="block w-full h-full rounded-md object-cover"
+                src={logotipo}
+                alt={name}
+                width={60}
+                height={60}
+              />
+            </div>
+          ) : (
+            <div className="rounded-md h-full flex justify-center items-center w-[50px] m-2 bg-[#6fd199]">
+              <span className="text-xl font-normal">{name.charAt(0)}</span>
+            </div>
+          )}
+          <div className="flex flex-col gap-1">
+            <div>
+              <h3 className="text-xl">{name}</h3>
+            </div>
+            <footer className="text-sm text-gray-600">
+              {municipio} - {cidade}
+            </footer>
           </div>
-        ) : (
-          <div className="rounded-md h-full flex justify-center items-center w-[50px] m-2 bg-[#6fd199]">
-            <span className="text-xl font-normal">{name.charAt(0)}</span>
-          </div>
-        )}
-        <div className="flex flex-col gap-1">
-          <div>
-            <h3 className="text-xl">{name}</h3>
-          </div>
-          <footer className="text-sm text-gray-600">
-            {municipio} - {cidade}
-          </footer>
         </div>
         <div className="relative">
           <button
@@ -105,7 +109,7 @@ const CensoMiniature: FC<CensoMiniatureProps> = ({
                 </li>
                 <li>
                   <button
-                    onClick={handleDelete}
+                    onClick={() => deleteFn(id)}
                     className="flex items-center text-red-600 w-full gap-4 px-2 py-[0.4rem] text-sm rounded-[0.4rem] bg-transparent transition-all ease-in-out hover:bg-red-100 no-close"
                   >
                     <DeleteOutlined />

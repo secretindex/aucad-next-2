@@ -7,11 +7,18 @@ import AddNewDocument from "@/components/admin/census/documents/AddNewDocument"
 import DocumentList from "@/components/admin/census/documents/DocumentList"
 
 import axios from "axios"
+import SecondDocumentAdd from "@/components/admin/census/documents/SecondDocumentAdd"
 
 export type NewDocument = {
   nome: string
   valores: string[]
   respostas: string[]
+}
+
+
+export type SecondDocument = {
+  name: string
+  reject: Array<any>
 }
 
 export type NewDocumentID = {
@@ -68,8 +75,8 @@ const ActivesDocumentSettings = ({
     <>
       <section className="flex h-full w-full flex-col items-center justify-center">
         <div className="h-32 flex w-4/6 flex-col items-center justify-center text-center">
-          <h1 style={{ fontSize: "24px", fontWeight: "bold" }}>Ativos</h1>
-          <span className="text-red-500 text-xs">
+          <h1 className="text-3xl font-bold">Ativos</h1>
+          <span className="text-gray-400 text-xs">
             Para mais informações, consulte um especialista
           </span>
         </div>
@@ -133,7 +140,7 @@ const ActivesDocumentSettings = ({
         </div>
       </section>
       {modalVisible && (
-        <AddNewDocument
+        <SecondDocumentAdd
           setModalVisible={setModalVisible}
           setNewDocumentList={setNewDocumentList}
         />

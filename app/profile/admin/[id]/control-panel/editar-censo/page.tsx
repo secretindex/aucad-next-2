@@ -1,22 +1,28 @@
 "use client"
 
 import CensoMiniature from "@/components/control-panel/censos/CensoMiniature"
+import LoadingSpin from "@/components/LoadingSpin"
 import axios from "axios"
 import { useEffect, useState } from "react"
 
+import useSWR from "swr"
+
+const fetcher = (url: string) => axios.get(url).then((res) => res.data.data)
+
 const EditarCenso = () => {
-  const [censoList, setCensoList] = useState<Array<any>>([])
+  const { data, error, isLoading, mutate } = useSWR(
+    "/api/census/get-all-census",
+    fetcher
+  )
 
-  const getCensos = async () => {
-    const censos = await axios.get("/api/census/get-all-census")
-    setCensoList(censos.data.data)
+  console.log(data, error)
 
-    console.log(censos.data.data)
+  const deleteCensus = async (id: string) => {
+    const deleted = await axios.delete("/api/census/" + id)
+    console.log(deleted.data.status)
+
+    mutate()
   }
-
-  useEffect(() => {
-    getCensos()
-  }, [])
 
   return (
     <section className="flex flex-col h-full justify-center items-center">
@@ -26,17 +32,32 @@ const EditarCenso = () => {
         </div>
         <div className="">
           <ul className="flex flex-row md:flex-wrap xl:flex-nowrap gap-4">
-            {censoList.map((censo) => (
+            {isLoading ? (
+              <LoadingSpin />
+            ) : (
               <>
-                <CensoMiniature
-                  id={censo.id}
-                  name={censo.name}
-                  municipio={censo.municipio}
-                  cidade={censo.estado}
-                  logotipo={censo.logotipo === null ? "" : censo.logotipo}
-                />
+                {data.map(
+                  (censo: {
+                    id: string
+                    name: string
+                    municipio: string
+                    estado: string
+                    logotipo: string | null
+                  }) => (
+                    <>
+                      <CensoMiniature
+                        id={censo.id}
+                        name={censo.name}
+                        municipio={censo.municipio}
+                        cidade={censo.estado}
+                        logotipo={censo.logotipo === null ? "" : censo.logotipo}
+                        deleteFn={deleteCensus}
+                      />
+                    </>
+                  )
+                )}
               </>
-            ))}
+            )}
           </ul>
         </div>
       </div>

@@ -23,4 +23,5 @@ const ControlButton: React.FC<ControlButtonProps> = ({
     </Link>
   )
 }
+
 export default ControlButton
