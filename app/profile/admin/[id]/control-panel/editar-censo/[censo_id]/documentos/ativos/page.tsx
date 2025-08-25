@@ -45,7 +45,7 @@ const ActivesDocumentSettings = ({
 
   const fetchAssociatedDocuments = () => {
     axios.get("/api/census/documents/ativos?id=" + censo_id).then((res) => {
-      console.log("Associated documents ", res.data)
+      console.log("Associated documents ", res.data) // -----------------------------------------------------------
       setAssociatedDocuments(res.data.data)
     })
   }

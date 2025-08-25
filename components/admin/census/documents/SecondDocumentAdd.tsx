@@ -1,4 +1,4 @@
-import { Dispatch, FC, SetStateAction, useState } from "react"
+import { Dispatch, FC, SetStateAction, useEffect, useState } from "react"
 import {
   NewDocument,
   SecondDocument,
@@ -21,6 +21,10 @@ const SecondDocumentAdd: FC<AddNewDocumentProps> = ({
   const handleCloseModal = () => {
     setModalVisible(false)
   }
+
+  useEffect(() => {
+    console.log(options)
+  }, [options])
 
   // TODO: Opções children podem ser separadas por > antes da vírgula no campo valores (apenas hipótese)
   // TODO: respostas children podem ser separadas por > e, as que não tiverem valor nenhum, poddem conter o caractere * ou qualquer outro (antes da vírgula) (apenas hipótese 2)
