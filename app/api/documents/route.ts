@@ -3,7 +3,7 @@ import { createClient } from "@/lib/supabase/ssr/ssrServer"
 async function GET() {
   const supabase = createClient()
   try {
-    const { data, error } = await supabase.from("documentos").select()
+    const { data, error } = await supabase.from("documents").select()
 
     console.log(error)
 
@@ -23,15 +23,14 @@ async function POST(req: Request) {
   try {
     const body = await req.json()
 
-    console.log(body)
+    console.log(body.name)
 
-    const { data, error } = await supabase.from("documentos").insert(body).select()
-
-    console.log(error)
+    const { data, error } = await supabase
+      .from("documents")
+      .insert({ name: body.name })
+      .select()
 
     if (error) throw new Error(error.message)
-
-    console.log(data)
 
     return Response.json({ response: data, originalBody: body, data: body })
   } catch (e) {

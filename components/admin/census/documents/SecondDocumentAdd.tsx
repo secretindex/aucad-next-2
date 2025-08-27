@@ -1,10 +1,17 @@
-import { Dispatch, FC, SetStateAction, useEffect, useState } from "react"
+import {
+  BaseSyntheticEvent,
+  Dispatch,
+  FC,
+  SetStateAction,
+  useEffect,
+  useState,
+} from "react"
 import {
   NewDocument,
   SecondDocument,
 } from "@/app/profile/admin/[id]/control-panel/editar-censo/[censo_id]/documentos/ativos/page"
-import OptionsForm from "./options/OptionsForm"
-
+import { Input } from "antd"
+import axios from "axios"
 
 interface AddNewDocumentProps {
   setModalVisible: Dispatch<SetStateAction<boolean>>
@@ -18,6 +25,9 @@ const SecondDocumentAdd: FC<AddNewDocumentProps> = ({
   setNewDocumentList,
 }) => {
   const [options, setOptions] = useState<Array<DocumentOptions>>([])
+  const [documentName, setDocumentName] = useState<string>("")
+  // const []
+  const [step, setStep] = useState<1 | 2 | 3 | 4>(1)
   const handleCloseModal = () => {
     setModalVisible(false)
   }
@@ -26,26 +36,26 @@ const SecondDocumentAdd: FC<AddNewDocumentProps> = ({
     console.log(options)
   }, [options])
 
-  // TODO: Opções children podem ser separadas por > antes da vírgula no campo valores (apenas hipótese)
-  // TODO: respostas children podem ser separadas por > e, as que não tiverem valor nenhum, poddem conter o caractere * ou qualquer outro (antes da vírgula) (apenas hipótese 2)
 
-  const handleSubmit = (formData: FormData) => {
-    handleCloseModal()
-    setNewDocumentList((prev) => [
-      ...prev,
-      {
-        nome: formData.get("nome")!.toString(),
-        valores: formData.get("valores")!.toString().split("\n"),
-        respostas: formData.get("respostas")!.toString().split("\n"),
-      },
-    ])
+  const handleNextStep = async () => {
+    if (documentName.length < 1) return
 
-    console.log("submitted")
+    const res = await axios.post("/api/documents", { name: documentName })
+
+    setStep(2)
+
+    console.log(res.data)
+  }
+
+  const handleDocumentConfiguration = async () => {
+    const res = await axios.get(`/api/documents/${documentName}`)
+
+    console.log(res.data);
   }
 
   return (
     <div className="absolute w-screen h-screen bg-[#1010104c] flex flex-col justify-center items-center">
-      <div className="relative rounded-md border-[#40404070] border-[1px] p-4 shadow-md bg-white">
+      <div className="relative rounded-md border-[#40404070] border-[1px] w-2/5 p-4 shadow-md bg-white">
         <div className="absolute top-3 right-3">
           <button
             onClick={handleCloseModal}
@@ -54,21 +64,44 @@ const SecondDocumentAdd: FC<AddNewDocumentProps> = ({
             X
           </button>
         </div>
-        <div>
-          <div className="py-2 flex items-center justify-center">
-            <h3 className="font-bold text-2xl">Adicionar novo documento</h3>
-          </div>
+        <div className="py-2 flex items-center justify-center">
+          <h3 className="font-bold text-xl">Adicionar novo documento</h3>
+        </div>
+        <div className="flex flex-col gap-4">
           <div className="flex flex-col gap-4">
-            { options && options.map(opt => (
-              <>
-              
-              </>
-            )) }
+            {options &&
+              options.map((opt, i) => (
+                <div key={i} className="flex justify-between">
+                  <span className="font-bold">{opt.option}</span>
+                  <span>{opt.reject}</span>
+                </div>
+              ))}
           </div>
-          <OptionsForm setOptions={setOptions} />
+          {/*  <CensusDocumentOptions></CensusDocumentOptions> */}
+          {step === 1 && (
+            <div>
+              <label htmlFor="name" className="text-sm text-gray-600">
+                Digite o nome do documento
+              </label>
+              <Input
+                onChange={(e: BaseSyntheticEvent) =>
+                  setDocumentName(e.target.value as string)
+                }
+                type="text"
+                name="document_name"
+                id="document-name"
+              />
+            </div>
+          )}
+          {step === 2 && (<div>
+
+          </div>)}
           <div>
-            <button className="border-[1px] border-[#0004] rounded-md p-2 w-full font-bold hover:bg-gray-50">
-              Enviar
+            <button
+              onClick={handleNextStep}
+              className="border-[1px] border-[#0004] rounded-md p-2 w-full font-bold hover:bg-gray-50"
+            >
+              Próximo
             </button>
           </div>
         </div>

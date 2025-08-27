@@ -3,7 +3,6 @@
 import CensoMiniature from "@/components/control-panel/censos/CensoMiniature"
 import LoadingSpin from "@/components/LoadingSpin"
 import axios from "axios"
-import { useEffect, useState } from "react"
 
 import useSWR from "swr"
 

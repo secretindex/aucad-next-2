@@ -16,6 +16,8 @@ const OptionsForm = ({ setOptions }: OptionProps) => {
     const formData = new FormData(e.currentTarget)
     const values = Object.fromEntries(formData.entries())
 
+    console.log(values)
+
     setOptions((prev) => [...prev, values as DocumentOptions])
   }
 
